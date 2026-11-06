@@ -54,10 +54,12 @@ namespace VodokanalManager.Services
         public void LogError(string message, Exception ex = null)
         {
             var sb = new StringBuilder(message);
-            if (ex != null)
+            Exception cur = ex;
+            while (cur != null)
             {
-                sb.AppendLine().Append("Исключение: ").Append(ex.GetType().FullName).Append(": ").Append(ex.Message);
-                sb.AppendLine().Append(ex.StackTrace);
+                sb.AppendLine().Append("Исключение: ").Append(cur.GetType().FullName).Append(": ").Append(cur.Message);
+                sb.AppendLine().Append(cur.StackTrace);
+                cur = cur.InnerException;
             }
             WriteEntry("ERROR", sb.ToString());
         }

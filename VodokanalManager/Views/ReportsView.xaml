@@ -30,7 +30,7 @@
                                  IsChecked="{Binding IsDebtorsReportVisible, Mode=OneWay}"
                                  Command="{Binding LoadReportCommand}"
                                  GroupName="ReportType"
-                                 Style="{StaticResource {x:Type ToggleButton}}"
+                                 Style="{StaticResource ReportTabButtonStyle}"
                                  Height="32" Padding="12,0" Margin="0,0,8,4"
                                  Click="ReportType1_Click"/>
 
@@ -38,7 +38,7 @@
                                  IsChecked="{Binding IsSuspiciousReportVisible, Mode=OneWay}"
                                  Command="{Binding LoadReportCommand}"
                                  GroupName="ReportType"
-                                 Style="{StaticResource {x:Type ToggleButton}}"
+                                 Style="{StaticResource ReportTabButtonStyle}"
                                  Height="32" Padding="12,0" Margin="0,0,8,4"
                                  Click="ReportType2_Click"/>
 
@@ -46,7 +46,7 @@
                                  IsChecked="{Binding IsConsumptionReportVisible, Mode=OneWay}"
                                  Command="{Binding LoadReportCommand}"
                                  GroupName="ReportType"
-                                 Style="{StaticResource {x:Type ToggleButton}}"
+                                 Style="{StaticResource ReportTabButtonStyle}"
                                  Height="32" Padding="12,0" Margin="0,0,8,4"
                                  Click="ReportType3_Click"/>
 
@@ -54,7 +54,7 @@
                                  IsChecked="{Binding IsPaymentSummaryVisible, Mode=OneWay}"
                                  Command="{Binding LoadReportCommand}"
                                  GroupName="ReportType"
-                                 Style="{StaticResource {x:Type ToggleButton}}"
+                                 Style="{StaticResource ReportTabButtonStyle}"
                                  Height="32" Padding="12,0" Margin="0,0,8,4"
                                  Click="ReportType4_Click"/>
                 </WrapPanel>
