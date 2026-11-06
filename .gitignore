@@ -23,3 +23,6 @@ TestResults/
 !lib/System.Data.SQLite.dll
 !lib/x86/SQLite.Interop.dll
 !lib/x64/SQLite.Interop.dll
+
+## Временные файлы Microsoft Office
+~$*
