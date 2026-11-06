@@ -1,0 +1,27 @@
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.31729.503
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VodokanalManager", "VodokanalManager\VodokanalManager.csproj", "{A8D3F9E1-2B4C-48E3-A5B1-9C8D7E6F5A01}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VodokanalManager.Tests", "VodokanalManager.Tests\VodokanalManager.Tests.csproj", "{B7F4E8D2-3C5A-4B2E-B9D1-8E7C6F5A0102}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{A8D3F9E1-2B4C-48E3-A5B1-9C8D7E6F5A01}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A8D3F9E1-2B4C-48E3-A5B1-9C8D7E6F5A01}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A8D3F9E1-2B4C-48E3-A5B1-9C8D7E6F5A01}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A8D3F9E1-2B4C-48E3-A5B1-9C8D7E6F5A01}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B7F4E8D2-3C5A-4B2E-B9D1-8E7C6F5A0102}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B7F4E8D2-3C5A-4B2E-B9D1-8E7C6F5A0102}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B7F4E8D2-3C5A-4B2E-B9D1-8E7C6F5A0102}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B7F4E8D2-3C5A-4B2E-B9D1-8E7C6F5A0102}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
