@@ -1,0 +1,148 @@
+<UserControl x:Class="VodokanalManager.Views.AdministrationView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:common="clr-namespace:VodokanalManager.ViewModels.Common">
+
+    <UserControl.Resources>
+        <common:StringToVisibilityConverter x:Key="StringToVis"/>
+    </UserControl.Resources>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <!-- Блок сообщений -->
+        <StackPanel Grid.Row="0" Margin="0,0,0,8">
+            <Border Background="{StaticResource DangerLightBrush}" BorderBrush="{StaticResource DangerBrush}" BorderThickness="1" CornerRadius="4" Padding="10,6" Margin="0,0,0,6" Visibility="{Binding ErrorMessage, Converter={StaticResource StringToVis}}">
+                <TextBlock Text="{Binding ErrorMessage}" Foreground="{StaticResource DangerBrush}" FontSize="12" TextWrapping="Wrap"/>
+            </Border>
+
+            <Border Background="{StaticResource SuccessLightBrush}" BorderBrush="{StaticResource SuccessBrush}" BorderThickness="1" CornerRadius="4" Padding="10,6" Margin="0,0,0,6" Visibility="{Binding StatusMessage, Converter={StaticResource StringToVis}}">
+                <TextBlock Text="{Binding StatusMessage}" Foreground="{StaticResource SuccessBrush}" FontSize="12" TextWrapping="Wrap"/>
+            </Border>
+        </StackPanel>
+
+        <!-- Верхняя секция: Параметры базы данных и бэкапы -->
+        <Border Grid.Row="1" Style="{StaticResource CardBorderStyle}" Padding="16" Margin="0,0,0,12">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+
+                <TextBlock Grid.Row="0" Text="Обслуживание базы данных и резервное копирование:" Style="{StaticResource SectionHeaderStyle}" Margin="0,0,0,10"/>
+
+                <!-- Путь к базе данных и размер -->
+                <Grid Grid.Row="1" Margin="0,0,0,12">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+
+                    <StackPanel Grid.Column="0" Margin="0,0,16,0">
+                        <TextBlock Text="Текущее расположение файла базы данных (SQLite):" Style="{StaticResource LabelTextStyle}"/>
+                        <TextBox Text="{Binding DatabasePath, Mode=OneWay}" IsReadOnly="True" Background="#F1F5F9" Foreground="{StaticResource TextSecondaryBrush}"/>
+                    </StackPanel>
+
+                    <StackPanel Grid.Column="1" VerticalAlignment="Bottom">
+                        <TextBlock Text="Размер базы:" Style="{StaticResource LabelTextStyle}"/>
+                        <TextBlock Text="{Binding DatabaseFileSize}" FontWeight="Bold" FontSize="14" Foreground="{StaticResource BrandPrimaryBrush}" Margin="0,6,0,0"/>
+                    </StackPanel>
+                </Grid>
+
+                <!-- Кнопки управления БД, резервными копиями и демо-данными -->
+                <WrapPanel Grid.Row="2" VerticalAlignment="Center">
+                    <Button Content="Открыть папку с БД"
+                            Style="{StaticResource SecondaryButtonStyle}"
+                            Command="{Binding OpenDatabaseFolderCommand}"
+                            Margin="0,0,8,8"/>
+
+                    <Button Content="Сменить файл БД..."
+                            Style="{StaticResource SecondaryButtonStyle}"
+                            Command="{Binding SelectDatabaseFileCommand}"
+                            Margin="0,0,8,8"/>
+
+                    <Button Content="Создать резервную копию..."
+                            Command="{Binding CreateBackupCommand}"
+                            Margin="0,0,8,8"/>
+
+                    <Button Content="Восстановить из копии..."
+                            Style="{StaticResource SecondaryButtonStyle}"
+                            Command="{Binding RestoreBackupCommand}"
+                            Margin="0,0,16,8"/>
+
+                    <!-- Ползунок / флажок автозаполнения -->
+                    <CheckBox Content="Автозаполнение демо-данными при создании новой БД"
+                              IsChecked="{Binding AutoFillDemoData}"
+                              FontWeight="Medium"
+                              VerticalAlignment="Center"
+                              Margin="0,0,16,8"/>
+
+                    <!-- Кнопка удаления тестовых данных -->
+                    <Button Content="Убрать тестовые данные"
+                            Style="{StaticResource DangerButtonStyle}"
+                            Command="{Binding ClearDemoDataCommand}"
+                            Margin="0,0,0,8"/>
+                </WrapPanel>
+            </Grid>
+        </Border>
+
+        <!-- Нижняя секция: Управление учётными записями пользователей -->
+        <Border Grid.Row="2" Style="{StaticResource CardBorderStyle}" Margin="0">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+
+                <TextBlock Grid.Row="0" Text="Управление учётными записями пользователей системы:" Style="{StaticResource SectionHeaderStyle}" Margin="0,0,0,10"/>
+
+                <!-- Кнопки действий -->
+                <WrapPanel Grid.Row="1" Margin="0,0,0,10">
+                    <Button Content="Добавить сотрудника"
+                            Command="{Binding AddStaffUserCommand}"
+                            Margin="0,0,8,0"/>
+
+                    <Button Content="Редактировать"
+                            Style="{StaticResource SecondaryButtonStyle}"
+                            Command="{Binding EditUserCommand}"
+                            Margin="0,0,8,0"/>
+
+                    <Button Content="Изменить активность"
+                            Style="{StaticResource SecondaryButtonStyle}"
+                            Command="{Binding ToggleUserActiveCommand}"
+                            Margin="0,0,8,0"/>
+
+                    <Button Content="Обновить список"
+                            Style="{StaticResource SecondaryButtonStyle}"
+                            Command="{Binding LoadUsersCommand}"/>
+                </WrapPanel>
+
+                <!-- Таблица пользователей -->
+                <DataGrid Grid.Row="2"
+                          ItemsSource="{Binding Users}"
+                          SelectedItem="{Binding SelectedUser}">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="ID" Binding="{Binding Id}" Width="50"/>
+                        <DataGridTextColumn Header="Имя пользователя (логин)" Binding="{Binding Login}" Width="160"/>
+                        <DataGridTextColumn Header="ФИО / Название" Binding="{Binding FullName}" Width="260"/>
+                        <DataGridTextColumn Header="Роль в системе" Binding="{Binding RoleName}" Width="160"/>
+                        <DataGridTextColumn Header="Статус" Binding="{Binding StatusText}" Width="120"/>
+                        <DataGridTextColumn Header="Привязанный абонент" Binding="{Binding SubscriberId, TargetNullValue='—'}" Width="160"/>
+                    </DataGrid.Columns>
+                </DataGrid>
+
+                <Border Grid.Row="3" Background="{StaticResource CardAltBackgroundBrush}" BorderBrush="{StaticResource BorderLightBrush}" BorderThickness="1" CornerRadius="4" Padding="10" Margin="0,10,0,0">
+                    <TextBlock Text="💡 Учётные записи абонентов (роль «Абонент») формируются автоматически при внесении нового абонента в картотеку. Вы можете просматривать их, менять пароли и блокировать доступ кнопкой «Редактировать»."
+                               FontSize="11" Foreground="{StaticResource TextSecondaryBrush}" TextWrapping="Wrap"/>
+                </Border>
+            </Grid>
+        </Border>
+    </Grid>
+</UserControl>

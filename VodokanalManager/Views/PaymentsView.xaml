@@ -1,0 +1,101 @@
+<UserControl x:Class="VodokanalManager.Views.PaymentsView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:common="clr-namespace:VodokanalManager.ViewModels.Common">
+
+    <UserControl.Resources>
+        <common:BoolToVisibilityConverter x:Key="BoolToVis"/>
+        <common:StringToVisibilityConverter x:Key="StringToVis"/>
+    </UserControl.Resources>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <!-- Верхняя панель фильтрации и кнопок -->
+        <Border Grid.Row="0" Style="{StaticResource CardBorderStyle}" Padding="12" Margin="0,0,0,10">
+            <WrapPanel VerticalAlignment="Center">
+                <!-- Фильтр по абоненту -->
+                <StackPanel Orientation="Horizontal" Margin="0,0,16,0" VerticalAlignment="Center">
+                    <TextBlock Text="Абонент:" FontWeight="SemiBold" VerticalAlignment="Center" Margin="0,0,8,0"/>
+                    <ComboBox ItemsSource="{Binding Subscribers}"
+                              SelectedItem="{Binding SelectedFilterSubscriber}"
+                              DisplayMemberPath="Name"
+                              Width="250"/>
+                </StackPanel>
+
+                <!-- Фильтр по дате -->
+                <StackPanel Orientation="Horizontal" Margin="0,0,16,0" VerticalAlignment="Center">
+                    <TextBlock Text="Период с:" VerticalAlignment="Center" FontWeight="SemiBold" Margin="0,0,6,0"/>
+                    <DatePicker SelectedDate="{Binding FilterFromDate}" Width="120" Margin="0,0,8,0"/>
+                    <TextBlock Text="по:" VerticalAlignment="Center" FontWeight="SemiBold" Margin="0,0,6,0"/>
+                    <DatePicker SelectedDate="{Binding FilterToDate}" Width="120"/>
+                </StackPanel>
+
+                <!-- Кнопки действий -->
+                <Button Content="Принять платёж"
+                        Command="{Binding RegisterPaymentCommand}"
+                        Margin="0,0,8,0"/>
+
+                <Button Content="Печать квитанции"
+                        Style="{StaticResource SecondaryButtonStyle}"
+                        Command="{Binding PrintReceiptCommand}"
+                        Margin="0,0,8,0"/>
+
+                <Button Content="Обновить"
+                        Style="{StaticResource SecondaryButtonStyle}"
+                        Command="{Binding RefreshCommand}"/>
+            </WrapPanel>
+        </Border>
+
+        <!-- Баннеры сообщений -->
+        <StackPanel Grid.Row="1" Margin="0,0,0,8">
+            <Border Background="{StaticResource DangerLightBrush}" BorderBrush="{StaticResource DangerBrush}" BorderThickness="1" CornerRadius="4" Padding="10,6" Margin="0,0,0,6" Visibility="{Binding ErrorMessage, Converter={StaticResource StringToVis}}">
+                <TextBlock Text="{Binding ErrorMessage}" Foreground="{StaticResource DangerBrush}" FontSize="12" TextWrapping="Wrap"/>
+            </Border>
+
+            <Border Background="{StaticResource SuccessLightBrush}" BorderBrush="{StaticResource SuccessBrush}" BorderThickness="1" CornerRadius="4" Padding="10,6" Margin="0,0,0,6" Visibility="{Binding StatusMessage, Converter={StaticResource StringToVis}}">
+                <TextBlock Text="{Binding StatusMessage}" Foreground="{StaticResource SuccessBrush}" FontSize="12" TextWrapping="Wrap"/>
+            </Border>
+        </StackPanel>
+
+        <!-- Таблица платежей -->
+        <Border Grid.Row="2" Style="{StaticResource CardBorderStyle}" Margin="0">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+
+                <TextBlock Grid.Row="0" Text="Реестр принятых платежей абонентов водоканала:" Style="{StaticResource SectionHeaderStyle}" Margin="0,0,0,8"/>
+
+                <DataGrid Grid.Row="1"
+                          ItemsSource="{Binding Payments}"
+                          SelectedItem="{Binding SelectedPayment}">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="№" Binding="{Binding Id}" Width="60"/>
+                        <DataGridTextColumn Header="Дата платежа" Binding="{Binding PaymentDate, StringFormat=dd.MM.yyyy}" Width="110"/>
+                        <DataGridTextColumn Header="Лицевой счёт" Binding="{Binding SubscriberAccountNo}" Width="120"/>
+                        <DataGridTextColumn Header="Абонент" Binding="{Binding SubscriberName}" Width="240"/>
+                        <DataGridTextColumn Header="Адрес объекта" Binding="{Binding SubscriberAddress}" Width="240"/>
+                        <DataGridTextColumn Header="Способ оплаты" Binding="{Binding PaymentMethodName}" Width="150"/>
+                        <DataGridTextColumn Header="Сумма, ₽" Binding="{Binding AmountRub, StringFormat=N2}" Width="120">
+                            <DataGridTextColumn.ElementStyle>
+                                <Style TargetType="TextBlock">
+                                    <Setter Property="FontWeight" Value="Bold"/>
+                                    <Setter Property="HorizontalAlignment" Value="Right"/>
+                                    <Setter Property="Padding" Value="0,0,8,0"/>
+                                    <Setter Property="Foreground" Value="{StaticResource SuccessBrush}"/>
+                                </Style>
+                            </DataGridTextColumn.ElementStyle>
+                        </DataGridTextColumn>
+                        <DataGridTextColumn Header="Кассир" Binding="{Binding UserName}" Width="140"/>
+                    </DataGrid.Columns>
+                </DataGrid>
+            </Grid>
+        </Border>
+    </Grid>
+</UserControl>

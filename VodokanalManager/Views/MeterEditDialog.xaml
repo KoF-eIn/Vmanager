@@ -1,0 +1,48 @@
+<Window x:Class="VodokanalManager.Views.MeterEditDialog"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Регистрация прибора учёта"
+        Height="420" Width="440"
+        WindowStartupLocation="CenterOwner"
+        ResizeMode="NoResize"
+        Background="{StaticResource BackgroundBrush}">
+
+    <Border Margin="16" Padding="20" Background="{StaticResource CardBackgroundBrush}" BorderBrush="{StaticResource BorderMediumBrush}" BorderThickness="1" CornerRadius="6">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+
+            <TextBlock Grid.Row="0" Text="Регистрация нового прибора учёта" Style="{StaticResource SectionHeaderStyle}" Margin="0,0,0,12"/>
+
+            <Border Grid.Row="1" x:Name="ErrorBorder" Background="{StaticResource DangerLightBrush}" BorderBrush="{StaticResource DangerBrush}" BorderThickness="1" CornerRadius="4" Padding="10,6" Margin="0,0,0,12" Visibility="Collapsed">
+                <TextBlock x:Name="ErrorTextBlock" Foreground="{StaticResource DangerBrush}" FontSize="12" TextWrapping="Wrap"/>
+            </Border>
+
+            <StackPanel Grid.Row="2">
+                <TextBlock Text="Абонент (владелец прибора):" Style="{StaticResource LabelTextStyle}"/>
+                <ComboBox x:Name="SubscriberComboBox" DisplayMemberPath="Name" Margin="0,0,0,12"/>
+
+                <TextBlock Text="Вид коммунальной услуги:" Style="{StaticResource LabelTextStyle}"/>
+                <ComboBox x:Name="ServiceTypeComboBox" Margin="0,0,0,12">
+                    <ComboBoxItem Content="Холодное водоснабжение (ХВС)" Tag="1" IsSelected="True"/>
+                    <ComboBoxItem Content="Горячее водоснабжение (ГВС)" Tag="2"/>
+                </ComboBox>
+
+                <TextBlock Text="Заводской серийный номер счётчика:" Style="{StaticResource LabelTextStyle}"/>
+                <TextBox x:Name="SerialNoTextBox" Margin="0,0,0,12"/>
+
+                <TextBlock Text="Дата опломбировки / установки:" Style="{StaticResource LabelTextStyle}"/>
+                <DatePicker x:Name="InstallDatePicker" Margin="0,0,0,12"/>
+            </StackPanel>
+
+            <StackPanel Grid.Row="3" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,12,0,0">
+                <Button Content="Зарегистрировать" Click="SaveButton_Click" Margin="0,0,8,0" Width="140"/>
+                <Button Content="Отмена" Style="{StaticResource SecondaryButtonStyle}" Click="CancelButton_Click" Width="90"/>
+            </StackPanel>
+        </Grid>
+    </Border>
+</Window>

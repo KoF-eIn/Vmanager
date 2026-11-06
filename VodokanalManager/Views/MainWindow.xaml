@@ -1,0 +1,210 @@
+<Window x:Class="VodokanalManager.Views.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="clr-namespace:VodokanalManager.ViewModels"
+        xmlns:views="clr-namespace:VodokanalManager.Views"
+        xmlns:common="clr-namespace:VodokanalManager.ViewModels.Common"
+        Title="МУП «Водоканал-Сервис» — Абонентский учёт и платежи"
+        Height="780" Width="1300"
+        MinHeight="680" MinWidth="1100"
+        WindowStartupLocation="CenterScreen"
+        Background="{StaticResource BackgroundBrush}">
+
+    <Window.Resources>
+        <common:BoolToVisibilityConverter x:Key="BoolToVis" />
+        <common:StringToVisibilityConverter x:Key="StringToVis" />
+
+        <DataTemplate DataType="{x:Type vm:SubscribersViewModel}">
+            <views:SubscribersView />
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type vm:MetersReadingsViewModel}">
+            <views:MetersReadingsView />
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type vm:PaymentsViewModel}">
+            <views:PaymentsView />
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type vm:TariffsViewModel}">
+            <views:TariffsView />
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type vm:ReportsViewModel}">
+            <views:ReportsView />
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type vm:AdministrationViewModel}">
+            <views:AdministrationView />
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type vm:SubscriberPortalViewModel}">
+            <views:SubscriberPortalView />
+        </DataTemplate>
+    </Window.Resources>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" /> <!-- Верхняя шапка -->
+            <RowDefinition Height="*" />    <!-- Рабочая область -->
+            <RowDefinition Height="28" />   <!-- Нижняя статусная строка -->
+        </Grid.RowDefinitions>
+
+        <!-- Верхняя шапка с навигацией (Navy Header) -->
+        <Border Grid.Row="0" Background="{StaticResource HeaderBackgroundBrush}" BorderBrush="{StaticResource HeaderBorderBrush}" BorderThickness="0,0,0,1" Padding="16,6">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+
+                <!-- Логотип организации -->
+                <StackPanel Grid.Column="0" Orientation="Horizontal" VerticalAlignment="Center" Margin="0,0,24,0">
+                    <Path Data="{StaticResource IconWaterDrop}"
+                          Fill="{StaticResource BrandPrimaryBrush}"
+                          Width="26" Height="26"
+                          Stretch="Uniform"
+                          VerticalAlignment="Center"
+                          Margin="0,0,10,0"/>
+
+                    <StackPanel VerticalAlignment="Center">
+                        <TextBlock Text="МУП «Водоканал»"
+                                   FontSize="15"
+                                   FontWeight="Bold"
+                                   Foreground="{StaticResource TextLightBrush}"/>
+                        <TextBlock Text="г. Канск • Абонентский отдел"
+                                   FontSize="11"
+                                   Foreground="#94A3B8"/>
+                    </StackPanel>
+                </StackPanel>
+
+                <!-- Горизонтальные навигационные вкладки -->
+                <ScrollViewer Grid.Column="1" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Disabled">
+                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+
+                        <!-- Вкладка Абоненты -->
+                        <Button Style="{StaticResource NavTabButtonStyle}"
+                                Command="{Binding NavigateSubscribersCommand}"
+                                Visibility="{Binding CanViewSubscribers, Converter={StaticResource BoolToVis}}">
+                            <StackPanel Orientation="Horizontal">
+                                <Path Data="{StaticResource IconSubscribers}" Fill="White" Width="16" Height="16" Stretch="Uniform" Margin="0,0,8,0" VerticalAlignment="Center"/>
+                                <TextBlock Text="Абоненты" VerticalAlignment="Center"/>
+                            </StackPanel>
+                        </Button>
+
+                        <!-- Вкладка Приборы и показания -->
+                        <Button Style="{StaticResource NavTabButtonStyle}"
+                                Command="{Binding NavigateMetersReadingsCommand}"
+                                Visibility="{Binding CanViewMetersReadings, Converter={StaticResource BoolToVis}}">
+                            <StackPanel Orientation="Horizontal">
+                                <Path Data="{StaticResource IconMeters}" Fill="White" Width="16" Height="16" Stretch="Uniform" Margin="0,0,8,0" VerticalAlignment="Center"/>
+                                <TextBlock Text="Приборы и показания" VerticalAlignment="Center"/>
+                            </StackPanel>
+                        </Button>
+
+                        <!-- Вкладка Касса и платежи -->
+                        <Button Style="{StaticResource NavTabButtonStyle}"
+                                Command="{Binding NavigatePaymentsCommand}"
+                                Visibility="{Binding CanViewPayments, Converter={StaticResource BoolToVis}}">
+                            <StackPanel Orientation="Horizontal">
+                                <Path Data="{StaticResource IconPayments}" Fill="White" Width="16" Height="16" Stretch="Uniform" Margin="0,0,8,0" VerticalAlignment="Center"/>
+                                <TextBlock Text="Касса и платежи" VerticalAlignment="Center"/>
+                            </StackPanel>
+                        </Button>
+
+                        <!-- Вкладка Тарифы -->
+                        <Button Style="{StaticResource NavTabButtonStyle}"
+                                Command="{Binding NavigateTariffsCommand}"
+                                Visibility="{Binding CanViewTariffs, Converter={StaticResource BoolToVis}}">
+                            <StackPanel Orientation="Horizontal">
+                                <Path Data="{StaticResource IconTariffs}" Fill="White" Width="16" Height="16" Stretch="Uniform" Margin="0,0,8,0" VerticalAlignment="Center"/>
+                                <TextBlock Text="Тарифы" VerticalAlignment="Center"/>
+                            </StackPanel>
+                        </Button>
+
+                        <!-- Вкладка Аналитика и отчёты -->
+                        <Button Style="{StaticResource NavTabButtonStyle}"
+                                Command="{Binding NavigateReportsCommand}"
+                                Visibility="{Binding CanViewReports, Converter={StaticResource BoolToVis}}">
+                            <StackPanel Orientation="Horizontal">
+                                <Path Data="{StaticResource IconReports}" Fill="White" Width="16" Height="16" Stretch="Uniform" Margin="0,0,8,0" VerticalAlignment="Center"/>
+                                <TextBlock Text="Аналитика и отчёты" VerticalAlignment="Center"/>
+                            </StackPanel>
+                        </Button>
+
+                        <!-- Вкладка Система и БД -->
+                        <Button Style="{StaticResource NavTabButtonStyle}"
+                                Command="{Binding NavigateAdministrationCommand}"
+                                Visibility="{Binding CanViewAdministration, Converter={StaticResource BoolToVis}}">
+                            <StackPanel Orientation="Horizontal">
+                                <Path Data="{StaticResource IconSettings}" Fill="White" Width="16" Height="16" Stretch="Uniform" Margin="0,0,8,0" VerticalAlignment="Center"/>
+                                <TextBlock Text="Система и БД" VerticalAlignment="Center"/>
+                            </StackPanel>
+                        </Button>
+
+                        <!-- Вкладка Личный кабинет (для абонента) -->
+                        <Button Style="{StaticResource NavTabButtonStyle}"
+                                Command="{Binding NavigateSubscriberPortalCommand}"
+                                Visibility="{Binding CanViewSubscriberPortal, Converter={StaticResource BoolToVis}}">
+                            <StackPanel Orientation="Horizontal">
+                                <Path Data="{StaticResource IconUserPortal}" Fill="White" Width="16" Height="16" Stretch="Uniform" Margin="0,0,8,0" VerticalAlignment="Center"/>
+                                <TextBlock Text="Личный кабинет" VerticalAlignment="Center"/>
+                            </StackPanel>
+                        </Button>
+
+                    </StackPanel>
+                </ScrollViewer>
+
+                <!-- Панель пользователя и выход -->
+                <StackPanel Grid.Column="2" Orientation="Horizontal" VerticalAlignment="Center">
+                    <Border Background="#1E293B" CornerRadius="4" Padding="10,4" Margin="0,0,10,0">
+                        <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                            <StackPanel Margin="0,0,8,0" VerticalAlignment="Center">
+                                <TextBlock Text="{Binding CurrentUser.FullName}"
+                                           FontSize="12"
+                                           FontWeight="SemiBold"
+                                           Foreground="{StaticResource TextLightBrush}"/>
+                                <TextBlock Text="{Binding CurrentUser.RoleName}"
+                                           FontSize="10"
+                                           Foreground="{StaticResource BrandPrimaryBrush}"/>
+                            </StackPanel>
+                        </StackPanel>
+                    </Border>
+
+                    <Button Style="{StaticResource SecondaryButtonStyle}"
+                            Command="{Binding LogoutCommand}"
+                            Height="32" Padding="10,0"
+                            ToolTip="Сменить пользователя / Выйти в окно входа">
+                        <StackPanel Orientation="Horizontal">
+                            <Path Data="{StaticResource IconLogout}" Fill="{StaticResource TextBrush}" Width="14" Height="14" Stretch="Uniform" Margin="0,0,6,0" VerticalAlignment="Center"/>
+                            <TextBlock Text="Выход" VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </Button>
+                </StackPanel>
+
+            </Grid>
+        </Border>
+
+        <!-- Рабочая область -->
+        <ContentControl Grid.Row="1" Content="{Binding CurrentView}" Margin="16" />
+
+        <!-- Нижняя статусная панель -->
+        <Border Grid.Row="2" Background="{StaticResource CardAltBackgroundBrush}" BorderBrush="{StaticResource BorderLightBrush}" BorderThickness="0,1,0,0" Padding="12,0">
+            <Grid VerticalAlignment="Center">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+
+                <StackPanel Grid.Column="0" Orientation="Horizontal" VerticalAlignment="Center">
+                    <TextBlock Text="Раздел: " FontSize="11" Foreground="{StaticResource TextMutedBrush}"/>
+                    <TextBlock Text="{Binding ActiveTabName}" FontSize="11" FontWeight="SemiBold" Foreground="{StaticResource TextSecondaryBrush}" Margin="0,0,20,0"/>
+
+                    <TextBlock Text="Пользователь: " FontSize="11" Foreground="{StaticResource TextMutedBrush}"/>
+                    <TextBlock Text="{Binding CurrentUser.Login}" FontSize="11" Foreground="{StaticResource TextSecondaryBrush}" Margin="0,0,20,0"/>
+
+                    <TextBlock Text="Хранилище: встроенная база SQLite" FontSize="11" Foreground="{StaticResource TextSecondaryBrush}"/>
+                </StackPanel>
+
+                <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center">
+                    <TextBlock Text="МУП «Водоканал-Сервис» • 2026" FontSize="11" Foreground="{StaticResource TextMutedBrush}"/>
+                </StackPanel>
+            </Grid>
+        </Border>
+    </Grid>
+</Window>

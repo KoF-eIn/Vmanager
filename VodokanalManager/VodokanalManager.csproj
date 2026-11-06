@@ -1,0 +1,277 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{A8D3F9E1-2B4C-48E3-A5B1-9C8D7E6F5A01}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <RootNamespace>VodokanalManager</RootNamespace>
+    <AssemblyName>VodokanalManager</AssemblyName>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
+    <LangVersion>7.3</LangVersion>
+    <FileAlignment>512</FileAlignment>
+    <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <WarningLevel>4</WarningLevel>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <Deterministic>true</Deterministic>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Security" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Xaml">
+      <RequiredTargetFramework>4.0</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="WindowsBase" />
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
+    <Reference Include="ReachFramework" />
+    <Reference Include="System.Printing" />
+    <Reference Include="System.Data.SQLite">
+      <HintPath>..\lib\System.Data.SQLite.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <ApplicationDefinition Include="App.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </ApplicationDefinition>
+    <Compile Include="App.xaml.cs">
+      <DependentUpon>App.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+
+    <!-- Resources Styles -->
+    <Page Include="Resources\Styles\Colors.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Resources\Styles\Icons.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Resources\Styles\Styles.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+
+    <!-- Views Pages -->
+    <Page Include="Views\MainWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\LoginWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\SubscribersView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\SubscriberEditDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\MetersReadingsView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\ReadingEditDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\MeterEditDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\PaymentsView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\PaymentEditDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\ReceiptPreviewWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\TariffsView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\ReportsView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\AdministrationView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\UserEditDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\SubscriberPortalView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+
+    <!-- Code Behind -->
+    <Compile Include="Views\MainWindow.xaml.cs">
+      <DependentUpon>MainWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\LoginWindow.xaml.cs">
+      <DependentUpon>LoginWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\SubscribersView.xaml.cs">
+      <DependentUpon>SubscribersView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\SubscriberEditDialog.xaml.cs">
+      <DependentUpon>SubscriberEditDialog.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\MetersReadingsView.xaml.cs">
+      <DependentUpon>MetersReadingsView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\ReadingEditDialog.xaml.cs">
+      <DependentUpon>ReadingEditDialog.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\MeterEditDialog.xaml.cs">
+      <DependentUpon>MeterEditDialog.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\PaymentsView.xaml.cs">
+      <DependentUpon>PaymentsView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\PaymentEditDialog.xaml.cs">
+      <DependentUpon>PaymentEditDialog.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\ReceiptPreviewWindow.xaml.cs">
+      <DependentUpon>ReceiptPreviewWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\TariffsView.xaml.cs">
+      <DependentUpon>TariffsView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\ReportsView.xaml.cs">
+      <DependentUpon>ReportsView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\AdministrationView.xaml.cs">
+      <DependentUpon>AdministrationView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\UserEditDialog.xaml.cs">
+      <DependentUpon>UserEditDialog.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\SubscriberPortalView.xaml.cs">
+      <DependentUpon>SubscriberPortalView.xaml</DependentUpon>
+    </Compile>
+
+    <!-- Models -->
+    <Compile Include="Models\Catalogs.cs" />
+    <Compile Include="Models\User.cs" />
+    <Compile Include="Models\Subscriber.cs" />
+    <Compile Include="Models\Meter.cs" />
+    <Compile Include="Models\TariffAndPayment.cs" />
+    <Compile Include="Models\ReportModels.cs" />
+
+    <!-- Data -->
+    <Compile Include="Data\IDatabase.cs" />
+    <Compile Include="Data\SqliteDialect.cs" />
+    <Compile Include="Data\SqliteFunctions.cs" />
+    <Compile Include="Data\SqliteDatabase.cs" />
+    <Compile Include="Data\DatabaseInitializer.cs" />
+    <Compile Include="Data\Repositories\UserRepository.cs" />
+    <Compile Include="Data\Repositories\SubscriberRepository.cs" />
+    <Compile Include="Data\Repositories\MeterRepository.cs" />
+    <Compile Include="Data\Repositories\ReadingRepository.cs" />
+    <Compile Include="Data\Repositories\TariffRepository.cs" />
+    <Compile Include="Data\Repositories\PaymentRepository.cs" />
+    <Compile Include="Data\Repositories\ReportRepository.cs" />
+
+    <!-- Services -->
+    <Compile Include="Services\PasswordHasher.cs" />
+    <Compile Include="Services\SettingsService.cs" />
+    <Compile Include="Services\LoggerService.cs" />
+    <Compile Include="Services\CsvExportService.cs" />
+    <Compile Include="Services\ReceiptPrintService.cs" />
+
+    <!-- ViewModels -->
+    <Compile Include="ViewModels\Common\ObservableObject.cs" />
+    <Compile Include="ViewModels\Common\Commands.cs" />
+    <Compile Include="ViewModels\Common\Converters.cs" />
+    <Compile Include="ViewModels\LoginViewModel.cs" />
+    <Compile Include="ViewModels\MainViewModel.cs" />
+    <Compile Include="ViewModels\SubscribersViewModel.cs" />
+    <Compile Include="ViewModels\MetersReadingsViewModel.cs" />
+    <Compile Include="ViewModels\PaymentsViewModel.cs" />
+    <Compile Include="ViewModels\TariffsViewModel.cs" />
+    <Compile Include="ViewModels\ReportsViewModel.cs" />
+    <Compile Include="ViewModels\AdministrationViewModel.cs" />
+    <Compile Include="ViewModels\SubscriberPortalViewModel.cs" />
+
+    <!-- Properties -->
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+
+  <!-- Embedded Fonts -->
+  <ItemGroup>
+    <Resource Include="Resources\Fonts\Roboto-Regular.ttf" />
+    <Resource Include="Resources\Fonts\Roboto-Bold.ttf" />
+    <None Include="Resources\Fonts\LICENSE.txt" />
+  </ItemGroup>
+
+  <!-- Embedded Database SQL Scripts -->
+  <ItemGroup>
+    <EmbeddedResource Include="Database\sqlite\01_schema.sql" />
+    <EmbeddedResource Include="Database\sqlite\02_views.sql" />
+    <EmbeddedResource Include="Database\sqlite\03_reference.sql" />
+    <EmbeddedResource Include="Database\sqlite\04_demo.sql" />
+    <EmbeddedResource Include="Database\mssql\01_schema.sql" />
+    <EmbeddedResource Include="Database\mssql\02_views.sql" />
+    <EmbeddedResource Include="Database\mssql\03_reference.sql" />
+    <EmbeddedResource Include="Database\mssql\04_demo.sql" />
+    <EmbeddedResource Include="Database\mssql\complex_queries.sql" />
+    <EmbeddedResource Include="Database\mssql\full_setup.sql" />
+  </ItemGroup>
+
+  <!-- Native Interop Libraries -->
+  <ItemGroup>
+    <Content Include="..\lib\x86\SQLite.Interop.dll">
+      <Link>x86\SQLite.Interop.dll</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\lib\x64\SQLite.Interop.dll">
+      <Link>x64\SQLite.Interop.dll</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <None Include="App.config" />
+    <None Include="app.manifest" />
+  </ItemGroup>
+
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>
