@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Data;
 using System.IO;
 using System.Reflection;
@@ -15,18 +15,18 @@ namespace VodokanalManager.Data
             _database = database ?? throw new ArgumentNullException(nameof(database));
         }
 
-        public void Initialize(bool autoFillDemoData = true)
+        public void Initialize(bool autoFillDemoData = false)
         {
             using (var connection = _database.CreateConnection())
             {
                 bool isSchemaPresent = CheckIfSchemaExists(connection);
                 if (isSchemaPresent)
                 {
+                    EnsureDemoFlagColumnsExist(connection);
                     return;
                 }
 
-                // Создание схемы и базовых данных при первом запуске
-                using (var transaction = connection.BeginTransaction())
+using (var transaction = connection.BeginTransaction())
                 {
                     try
                     {
@@ -34,8 +34,7 @@ namespace VodokanalManager.Data
                         ExecuteScript(connection, transaction, LoadSqlResource("02_views.sql"));
                         ExecuteScript(connection, transaction, LoadSqlResource("03_reference.sql"));
 
-                        // Если включено автозаполнение демо-данными при создании БД
-                        if (autoFillDemoData)
+if (autoFillDemoData)
                         {
                             ExecuteScript(connection, transaction, LoadSqlResource("04_demo.sql"));
                         }
@@ -51,35 +50,104 @@ namespace VodokanalManager.Data
             }
         }
 
+        public void LoadDemoData()
+        {
+            using (var connection = _database.CreateConnection())
+            {
+                EnsureDemoFlagColumnsExist(connection);
+                using (var transaction = connection.BeginTransaction())
+                {
+                    try
+                    {
+                        ExecuteScript(connection, transaction, LoadSqlResource("04_demo.sql"));
+                        transaction.Commit();
+                    }
+                    catch
+                    {
+                        transaction.Rollback();
+                        throw;
+                    }
+                }
+            }
+        }
+
         public void ClearDemoData()
         {
             using (var connection = _database.CreateConnection())
-            using (var transaction = connection.BeginTransaction())
             {
-                try
+                EnsureDemoFlagColumnsExist(connection);
+                using (var transaction = connection.BeginTransaction())
                 {
-                    using (var cmd = connection.CreateCommand())
+                    try
                     {
-                        cmd.Transaction = transaction;
+                        using (var cmd = connection.CreateCommand())
+                        {
+                            cmd.Transaction = transaction;
 
-                        // Очистка всех оперативных данных (каскадно или явно)
-                        cmd.CommandText = @"
-                            DELETE FROM Payments;
-                            DELETE FROM MeterReadings;
-                            DELETE FROM Meters;
-                            DELETE FROM Users WHERE RoleId = 4; -- удаление учетных записей абонентов
-                            DELETE FROM Subscribers;
-                        ";
-                        cmd.ExecuteNonQuery();
+cmd.CommandText = @"
+                                DELETE FROM Payments WHERE IsDemo = 1;
+                                DELETE FROM MeterReadings WHERE IsDemo = 1;
+                                DELETE FROM Meters WHERE IsDemo = 1;
+                                DELETE FROM Users WHERE RoleId = 4 AND IsDemo = 1;
+                                DELETE FROM Subscribers WHERE IsDemo = 1;
+                            ";
+                            cmd.ExecuteNonQuery();
+                        }
+
+                        transaction.Commit();
                     }
+                    catch
+                    {
+                        transaction.Rollback();
+                        throw;
+                    }
+                }
+            }
+        }
 
-                    transaction.Commit();
-                }
-                catch
+        private void EnsureDemoFlagColumnsExist(IDbConnection connection)
+        {
+            string[] tables = new[] { "Subscribers", "Users", "Meters", "MeterReadings", "Payments" };
+            foreach (var table in tables)
+            {
+                bool columnExists = false;
+                using (var cmd = connection.CreateCommand())
                 {
-                    transaction.Rollback();
-                    throw;
+                    cmd.CommandText = $"PRAGMA table_info({table});";
+                    using (var reader = cmd.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            string colName = reader["name"]?.ToString();
+                            if (string.Equals(colName, "IsDemo", StringComparison.OrdinalIgnoreCase))
+                            {
+                                columnExists = true;
+                                break;
+                            }
+                        }
+                    }
                 }
+
+                if (!columnExists)
+                {
+                    using (var alterCmd = connection.CreateCommand())
+                    {
+                        alterCmd.CommandText = $"ALTER TABLE {table} ADD COLUMN IsDemo INTEGER NOT NULL DEFAULT 0;";
+                        alterCmd.ExecuteNonQuery();
+                    }
+                }
+            }
+
+using (var tagCmd = connection.CreateCommand())
+            {
+                tagCmd.CommandText = @"
+                    UPDATE Subscribers SET IsDemo = 1 WHERE AccountNo IN ('100245', '100246', '100247', '100248', '100249', '100250', '100251', '100252', '100253', '100254', '100255', '100256', '200101', '200102', '200103');
+                    UPDATE Users SET IsDemo = 1 WHERE Login IN ('100245', '100246', '100247', '100248', '100249', '100250', '100251', '100252', '100253', '100254', '100255', '100256', '200101', '200102', '200103');
+                    UPDATE Meters SET IsDemo = 1 WHERE SubscriberId IN (SELECT Id FROM Subscribers WHERE IsDemo = 1);
+                    UPDATE MeterReadings SET IsDemo = 1 WHERE MeterId IN (SELECT Id FROM Meters WHERE IsDemo = 1);
+                    UPDATE Payments SET IsDemo = 1 WHERE SubscriberId IN (SELECT Id FROM Subscribers WHERE IsDemo = 1);
+                ";
+                tagCmd.ExecuteNonQuery();
             }
         }
 
@@ -174,8 +242,7 @@ namespace VodokanalManager.Data
                 }
             }
 
-            // Попытка загрузить из папки Database/sqlite рядом со сборкой или проектом
-            string[] probePaths = new[]
+string[] probePaths = new[]
             {
                 Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Database", "sqlite", fileName),
                 Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "..", "..", "Database", "sqlite", fileName),

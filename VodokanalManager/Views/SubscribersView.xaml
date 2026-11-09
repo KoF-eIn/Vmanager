@@ -1,4 +1,4 @@
-<UserControl x:Class="VodokanalManager.Views.SubscribersView"
+﻿<UserControl x:Class="VodokanalManager.Views.SubscribersView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:common="clr-namespace:VodokanalManager.ViewModels.Common">
@@ -12,23 +12,21 @@
 
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="Auto" /> <!-- Заголовок и фильтры -->
-            <RowDefinition Height="Auto" /> <!-- Сообщения -->
-            <RowDefinition Height="*" />    <!-- Таблица абонентов -->
-            <RowDefinition Height="Auto" /> <!-- Нижняя панель деталей абонента -->
+            <RowDefinition Height="Auto" /> 
+            <RowDefinition Height="Auto" /> 
+            <RowDefinition Height="*" />    
+            <RowDefinition Height="Auto" /> 
         </Grid.RowDefinitions>
 
-        <!-- Панель управления и фильтрации -->
-        <Border Grid.Row="0" Style="{StaticResource CardBorderStyle}" Padding="12" Margin="0,0,0,10">
+<Border Grid.Row="0" Style="{StaticResource CardBorderStyle}" Padding="12" Margin="0,0,0,10">
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="Auto" />
                 </Grid.RowDefinitions>
 
-                <!-- Верхний ряд: Поиск и фильтры -->
-                <WrapPanel Grid.Row="0" VerticalAlignment="Center" Margin="0,0,0,8">
-                    <!-- Поиск -->
+<WrapPanel Grid.Row="0" VerticalAlignment="Center" Margin="0,0,0,8">
+                    
                     <StackPanel Orientation="Horizontal" Margin="0,0,16,0" VerticalAlignment="Center">
                         <TextBlock Text="Поиск:" VerticalAlignment="Center" FontWeight="SemiBold" Margin="0,0,8,0"/>
                         <TextBox Text="{Binding SearchQuery, UpdateSourceTrigger=PropertyChanged}"
@@ -36,8 +34,7 @@
                                  ToolTip="Поиск по номеру лицевого счёта, ФИО абонента или адресу"/>
                     </StackPanel>
 
-                    <!-- Фильтр по типу -->
-                    <StackPanel Orientation="Horizontal" Margin="0,0,16,0" VerticalAlignment="Center">
+<StackPanel Orientation="Horizontal" Margin="0,0,16,0" VerticalAlignment="Center">
                         <TextBlock Text="Тип абонента:" VerticalAlignment="Center" FontWeight="SemiBold" Margin="0,0,8,0"/>
                         <ComboBox SelectedIndex="{Binding SelectedSubscriberTypeId}" Width="160">
                             <ComboBoxItem Content="Все категории" />
@@ -46,16 +43,14 @@
                         </ComboBox>
                     </StackPanel>
 
-                    <!-- Фильтр только с долгом -->
-                    <CheckBox Content="Только с задолженностью"
+<CheckBox Content="Только с задолженностью"
                               IsChecked="{Binding OnlyWithDebt}"
                               VerticalAlignment="Center"
                               FontWeight="Medium"
                               Margin="0,0,16,0"/>
                 </WrapPanel>
 
-                <!-- Нижний ряд: Кнопки действий -->
-                <WrapPanel Grid.Row="1" VerticalAlignment="Center">
+<WrapPanel Grid.Row="1" VerticalAlignment="Center">
                     <Button Content="Добавить абонента"
                             Command="{Binding AddSubscriberCommand}"
                             Margin="0,0,8,0"/>
@@ -69,6 +64,11 @@
                             Style="{StaticResource SecondaryButtonStyle}"
                             Command="{Binding ToggleActiveCommand}"
                             Margin="0,0,8,0"/>
+                    <Button Content="Удалить"
+                            Style="{StaticResource SecondaryButtonStyle}"
+                            Command="{Binding DeleteSubscriberCommand}"
+                            Margin="0,0,8,0"
+                            ToolTip="Удалить выбранного абонента"/>
 
                     <Button Content="Обновить"
                             Style="{StaticResource SecondaryButtonStyle}"
@@ -77,8 +77,7 @@
             </Grid>
         </Border>
 
-        <!-- Информационные баннеры -->
-        <StackPanel Grid.Row="1" Margin="0,0,0,8">
+<StackPanel Grid.Row="1" Margin="0,0,0,8">
             <Border Background="{StaticResource DangerLightBrush}" BorderBrush="{StaticResource DangerBrush}" BorderThickness="1" CornerRadius="4" Padding="10,6" Margin="0,0,0,6" Visibility="{Binding ErrorMessage, Converter={StaticResource StringToVis}}">
                 <TextBlock Text="{Binding ErrorMessage}" Foreground="{StaticResource DangerBrush}" FontSize="12" TextWrapping="Wrap"/>
             </Border>
@@ -88,8 +87,7 @@
             </Border>
         </StackPanel>
 
-        <!-- Главная таблица абонентов -->
-        <DataGrid Grid.Row="2"
+<DataGrid Grid.Row="2"
                   ItemsSource="{Binding Subscribers}"
                   SelectedItem="{Binding SelectedSubscriber}">
             <DataGrid.Columns>
@@ -128,16 +126,14 @@
             </DataGrid.Columns>
         </DataGrid>
 
-        <!-- Нижняя карточка: Приборы учета выбранного абонента -->
-        <Border Grid.Row="3" Style="{StaticResource CardBorderStyle}" Margin="0,10,0,0" Padding="12">
+<Border Grid.Row="3" Style="{StaticResource CardBorderStyle}" Margin="0,10,0,0" Padding="12">
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="280"/>
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
 
-                <!-- Краткая сводка выбранного абонента -->
-                <StackPanel Grid.Column="0" Margin="0,0,16,0">
+<StackPanel Grid.Column="0" Margin="0,0,16,0">
                     <TextBlock Text="Карточка абонента:" FontWeight="SemiBold" FontSize="13" Margin="0,0,0,6"/>
                     <TextBlock Text="{Binding SelectedSubscriber.Name, TargetNullValue='Выберите абонента из таблицы'}" FontWeight="Bold" FontSize="14" Foreground="{StaticResource HeaderBackgroundBrush}" TextWrapping="Wrap"/>
                     <TextBlock Text="{Binding SelectedSubscriber.Address}" TextWrapping="Wrap" FontSize="12" Foreground="{StaticResource TextSecondaryBrush}" Margin="0,3,0,0"/>
@@ -145,8 +141,7 @@
                     <TextBlock Text="{Binding SelectedSubscriber.DebtRub, StringFormat='Текущий долг: {0:N2} ₽'}" FontSize="12" FontWeight="Bold" Foreground="{Binding SelectedSubscriber.DebtRub, Converter={StaticResource DebtToColor}}" Margin="0,3,0,0"/>
                 </StackPanel>
 
-                <!-- Список счетчиков абонента -->
-                <StackPanel Grid.Column="1">
+<StackPanel Grid.Column="1">
                     <TextBlock Text="Установленные приборы учёта (счётчики воды):" FontWeight="SemiBold" FontSize="13" Margin="0,0,0,6"/>
                     <DataGrid ItemsSource="{Binding SelectedSubscriberMeters}" Height="110" AutoGenerateColumns="False" IsReadOnly="True">
                         <DataGrid.Columns>

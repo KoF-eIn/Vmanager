@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 using System.Windows.Input;
@@ -108,6 +108,7 @@ namespace VodokanalManager.ViewModels
         public ICommand RefreshCommand { get; }
         public ICommand RegisterPaymentCommand { get; }
         public ICommand PrintReceiptCommand { get; }
+        public ICommand DeletePaymentCommand { get; }
 
         public Func<Subscriber, Task<bool>> OpenNewPaymentDialogAsync { get; set; }
         public Action<System.Windows.Documents.FlowDocument> OpenReceiptPreview { get; set; }
@@ -132,6 +133,7 @@ namespace VodokanalManager.ViewModels
             RefreshCommand = new AsyncRelayCommand(LoadAllDataAsync);
             RegisterPaymentCommand = new AsyncRelayCommand(RegisterPaymentAsync, () => CanManage);
             PrintReceiptCommand = new AsyncRelayCommand(PrintReceiptAsync, () => SelectedPayment != null || SelectedFilterSubscriber != null);
+            DeletePaymentCommand = new AsyncRelayCommand(DeletePaymentAsync, () => CanManage && SelectedPayment != null);
 
             _ = LoadAllDataAsync();
         }
@@ -231,6 +233,41 @@ namespace VodokanalManager.ViewModels
             {
                 ErrorMessage = "Ошибка формирования квитанции: " + ex.Message;
                 _logger.LogError("Ошибка формирования квитанции", ex);
+            }
+        }
+        private async Task DeletePaymentAsync()
+        {
+            if (SelectedPayment == null)
+            {
+                ErrorMessage = "Выберите платёж для удаления.";
+                return;
+            }
+
+            var confirm = System.Windows.MessageBox.Show(
+                $"Вы действительно хотите отменить и удалить платёж №{SelectedPayment.Id} на сумму {SelectedPayment.AmountRub:N2} ₽ от абонента '{SelectedPayment.SubscriberName}'?",
+                "Подтверждение удаления платежа",
+                System.Windows.MessageBoxButton.YesNo,
+                System.Windows.MessageBoxImage.Warning);
+
+            if (confirm != System.Windows.MessageBoxResult.Yes) return;
+
+            IsBusy = true;
+            try
+            {
+                int payId = SelectedPayment.Id;
+                await System.Threading.Tasks.Task.Run(() => _paymentRepository.DeletePayment(payId));
+                SelectedPayment = null;
+                StatusMessage = "Платёж успешно отменён и удалён.";
+                await LoadAllDataAsync();
+            }
+            catch (Exception ex)
+            {
+                ErrorMessage = "Ошибка удаления платежа: " + ex.Message;
+                _logger.LogError("Ошибка удаления платежа", ex);
+            }
+            finally
+            {
+                IsBusy = false;
             }
         }
     }

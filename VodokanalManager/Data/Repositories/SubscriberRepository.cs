@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Text;
@@ -12,9 +12,10 @@ namespace VodokanalManager.Data.Repositories
         List<Subscriber> GetAll(string search = null, int? subscriberTypeId = null, bool onlyWithDebt = false);
         Subscriber GetById(int id);
         Subscriber GetByAccountNo(string accountNo);
-        int Add(Subscriber subscriber, IPasswordHasher hasher, string initialPassword = "user");
-        void Update(Subscriber subscriber);
+        int Add(Subscriber subscriber, IPasswordHasher hasher, string initialPassword = null);
+        void Update(Subscriber subscriber, string newPassword = null, IPasswordHasher hasher = null);
         void SetActive(int subscriberId, bool isActive);
+        void Delete(int subscriberId);
     }
 
     public class SubscriberRepository : ISubscriberRepository
@@ -156,7 +157,7 @@ namespace VodokanalManager.Data.Repositories
             return null;
         }
 
-        public int Add(Subscriber subscriber, IPasswordHasher hasher, string initialPassword = "user")
+        public int Add(Subscriber subscriber, IPasswordHasher hasher, string initialPassword = null)
         {
             if (subscriber == null) throw new ArgumentNullException(nameof(subscriber));
             if (hasher == null) throw new ArgumentNullException(nameof(hasher));
@@ -166,14 +167,14 @@ namespace VodokanalManager.Data.Repositories
             {
                 try
                 {
-                    // 1. Вставка абонента
+                    
                     int newSubId;
                     using (var cmd = conn.CreateCommand())
                     {
                         cmd.Transaction = trans;
                         cmd.CommandText = @"
-                            INSERT INTO Subscribers (AccountNo, Name, SubscriberTypeId, Address, Phone, IsActive)
-                            VALUES (@acc, @name, @typeId, @address, @phone, @isActive);
+                            INSERT INTO Subscribers (AccountNo, Name, SubscriberTypeId, Address, Phone, IsActive, IsDemo)
+                            VALUES (@acc, @name, @typeId, @address, @phone, @isActive, 0);
                             " + _database.Dialect.GetLastInsertedIdQuery;
 
                         AddParam(cmd, "@acc", subscriber.AccountNo.Trim());
@@ -186,20 +187,20 @@ namespace VodokanalManager.Data.Repositories
                         newSubId = Convert.ToInt32(cmd.ExecuteScalar());
                     }
 
-                    // 2. Автоматическое создание учетной записи абонента для личного кабинета (логин = лицевой счет)
-                    string password = string.IsNullOrWhiteSpace(initialPassword) ? "user" : initialPassword;
+string password = string.IsNullOrWhiteSpace(initialPassword) ? PasswordGenerator.Generate(8) : initialPassword.Trim();
                     string hash = hasher.HashPassword(password, out string salt);
 
                     using (var cmdUser = conn.CreateCommand())
                     {
                         cmdUser.Transaction = trans;
                         cmdUser.CommandText = @"
-                            INSERT INTO Users (Login, PasswordHash, Salt, FullName, RoleId, IsActive, SubscriberId)
-                            VALUES (@login, @hash, @salt, @fullName, 4, @isActive, @subId);";
+                            INSERT INTO Users (Login, PasswordHash, Salt, InitialPassword, FullName, RoleId, IsActive, SubscriberId, IsDemo)
+                            VALUES (@login, @hash, @salt, @initPwd, @fullName, 4, @isActive, @subId, 0);";
 
                         AddParam(cmdUser, "@login", subscriber.AccountNo.Trim());
                         AddParam(cmdUser, "@hash", hash);
                         AddParam(cmdUser, "@salt", salt);
+                        AddParam(cmdUser, "@initPwd", password);
                         AddParam(cmdUser, "@fullName", subscriber.Name.Trim());
                         AddParam(cmdUser, "@isActive", subscriber.IsActive ? 1 : 0);
                         AddParam(cmdUser, "@subId", newSubId);
@@ -219,7 +220,7 @@ namespace VodokanalManager.Data.Repositories
             }
         }
 
-        public void Update(Subscriber subscriber)
+        public void Update(Subscriber subscriber, string newPassword = null, IPasswordHasher hasher = null)
         {
             if (subscriber == null) throw new ArgumentNullException(nameof(subscriber));
 
@@ -228,7 +229,7 @@ namespace VodokanalManager.Data.Repositories
             {
                 try
                 {
-                    // Обновление абонента
+                    
                     using (var cmd = conn.CreateCommand())
                     {
                         cmd.Transaction = trans;
@@ -251,21 +252,94 @@ namespace VodokanalManager.Data.Repositories
                         cmd.ExecuteNonQuery();
                     }
 
-                    // Синхронизация ФИО в учетной записи
-                    using (var cmdUser = conn.CreateCommand())
+using (var cmdUser = conn.CreateCommand())
                     {
                         cmdUser.Transaction = trans;
-                        cmdUser.CommandText = @"
-                            UPDATE Users
-                            SET FullName = @name,
-                                IsActive = @isActive
-                            WHERE SubscriberId = @subId;";
+                        if (!string.IsNullOrWhiteSpace(newPassword) && hasher != null)
+                        {
+                            string hash = hasher.HashPassword(newPassword.Trim(), out string salt);
+                            cmdUser.CommandText = @"
+                                UPDATE Users
+                                SET FullName = @name,
+                                    IsActive = @isActive,
+                                    PasswordHash = @hash,
+                                    Salt = @salt,
+                                    InitialPassword = @initPwd
+                                WHERE SubscriberId = @subId;";
+
+                            AddParam(cmdUser, "@hash", hash);
+                            AddParam(cmdUser, "@salt", salt);
+                            AddParam(cmdUser, "@initPwd", newPassword.Trim());
+                        }
+                        else
+                        {
+                            cmdUser.CommandText = @"
+                                UPDATE Users
+                                SET FullName = @name,
+                                    IsActive = @isActive
+                                WHERE SubscriberId = @subId;";
+                        }
 
                         AddParam(cmdUser, "@name", subscriber.Name.Trim());
                         AddParam(cmdUser, "@isActive", subscriber.IsActive ? 1 : 0);
                         AddParam(cmdUser, "@subId", subscriber.Id);
 
-                        cmdUser.ExecuteNonQuery();
+                        int updated = cmdUser.ExecuteNonQuery();
+                        if (updated == 0)
+                        {
+                            
+                            string pwd = !string.IsNullOrWhiteSpace(newPassword) ? newPassword.Trim() : PasswordGenerator.Generate(8);
+                            string pwdHash = (hasher ?? new PasswordHasher()).HashPassword(pwd, out string pwdSalt);
+
+                            using (var cmdInsertUser = conn.CreateCommand())
+                            {
+                                cmdInsertUser.Transaction = trans;
+                                cmdInsertUser.CommandText = @"
+                                    INSERT INTO Users (Login, PasswordHash, Salt, InitialPassword, FullName, RoleId, IsActive, SubscriberId, IsDemo)
+                                    VALUES (@login, @hash, @salt, @initPwd, @fullName, 4, @isActive, @subId, 0);";
+
+                                AddParam(cmdInsertUser, "@login", subscriber.AccountNo.Trim());
+                                AddParam(cmdInsertUser, "@hash", pwdHash);
+                                AddParam(cmdInsertUser, "@salt", pwdSalt);
+                                AddParam(cmdInsertUser, "@initPwd", pwd);
+                                AddParam(cmdInsertUser, "@fullName", subscriber.Name.Trim());
+                                AddParam(cmdInsertUser, "@isActive", subscriber.IsActive ? 1 : 0);
+                                AddParam(cmdInsertUser, "@subId", subscriber.Id);
+
+                                cmdInsertUser.ExecuteNonQuery();
+                            }
+                        }
+                    }
+
+                    trans.Commit();
+                }
+                catch
+                {
+                    trans.Rollback();
+                    throw;
+                }
+            }
+        }
+
+        public void Delete(int subscriberId)
+        {
+            using (var conn = _database.CreateConnection())
+            using (var trans = conn.BeginTransaction())
+            {
+                try
+                {
+                    using (var cmd = conn.CreateCommand())
+                    {
+                        cmd.Transaction = trans;
+                        cmd.CommandText = @"
+                            DELETE FROM Payments WHERE SubscriberId = @id;
+                            DELETE FROM MeterReadings WHERE MeterId IN (SELECT Id FROM Meters WHERE SubscriberId = @id);
+                            DELETE FROM Meters WHERE SubscriberId = @id;
+                            DELETE FROM Users WHERE SubscriberId = @id;
+                            DELETE FROM Subscribers WHERE Id = @id;
+                        ";
+                        AddParam(cmd, "@id", subscriberId);
+                        cmd.ExecuteNonQuery();
                     }
 
                     trans.Commit();

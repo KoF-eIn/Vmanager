@@ -1,4 +1,4 @@
-<UserControl x:Class="VodokanalManager.Views.MetersReadingsView"
+﻿<UserControl x:Class="VodokanalManager.Views.MetersReadingsView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:common="clr-namespace:VodokanalManager.ViewModels.Common">
@@ -10,13 +10,12 @@
 
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/> <!-- Панель фильтров и действий -->
-            <RowDefinition Height="Auto"/> <!-- Баннеры ошибок и статуса -->
-            <RowDefinition Height="*"/>    <!-- Рабочая область -->
+            <RowDefinition Height="Auto"/> 
+            <RowDefinition Height="Auto"/> 
+            <RowDefinition Height="*"/>    
         </Grid.RowDefinitions>
 
-        <!-- Верхняя панель фильтрации и кнопок -->
-        <Border Grid.Row="0" Style="{StaticResource CardBorderStyle}" Padding="12" Margin="0,0,0,10">
+<Border Grid.Row="0" Style="{StaticResource CardBorderStyle}" Padding="12" Margin="0,0,0,10">
             <WrapPanel VerticalAlignment="Center">
                 <StackPanel Orientation="Horizontal" Margin="0,0,16,0" VerticalAlignment="Center">
                     <TextBlock Text="Абонент:" FontWeight="SemiBold" VerticalAlignment="Center" Margin="0,0,8,0"/>
@@ -46,8 +45,7 @@
             </WrapPanel>
         </Border>
 
-        <!-- Сообщения -->
-        <StackPanel Grid.Row="1" Margin="0,0,0,8">
+<StackPanel Grid.Row="1" Margin="0,0,0,8">
             <Border Background="{StaticResource DangerLightBrush}" BorderBrush="{StaticResource DangerBrush}" BorderThickness="1" CornerRadius="4" Padding="10,6" Margin="0,0,0,6" Visibility="{Binding ErrorMessage, Converter={StaticResource StringToVis}}">
                 <TextBlock Text="{Binding ErrorMessage}" Foreground="{StaticResource DangerBrush}" FontSize="12" TextWrapping="Wrap"/>
             </Border>
@@ -57,23 +55,32 @@
             </Border>
         </StackPanel>
 
-        <!-- Двухпанельная рабочая область -->
-        <Grid Grid.Row="2">
+<Grid Grid.Row="2">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="420"/>
                 <ColumnDefinition Width="10"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
 
-            <!-- Левая колонка: Приборы учёта -->
-            <Border Grid.Column="0" Style="{StaticResource CardBorderStyle}" Margin="0">
+<Border Grid.Column="0" Style="{StaticResource CardBorderStyle}" Margin="0">
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto"/>
                         <RowDefinition Height="*"/>
                     </Grid.RowDefinitions>
 
-                    <TextBlock Grid.Row="0" Text="Приборы учёта (счётчики):" Style="{StaticResource SectionHeaderStyle}" Margin="0,0,0,8"/>
+                    <Grid Grid.Row="0" Margin="0,0,0,8">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Grid.Column="0" Text="Приборы учёта (счётчики):" Style="{StaticResource SectionHeaderStyle}" Margin="0" VerticalAlignment="Center"/>
+                        <Button Grid.Column="1" Content="Удалить прибор"
+                                Style="{StaticResource SecondaryButtonStyle}"
+                                Command="{Binding DeleteMeterCommand}"
+                                Height="26" Padding="8,0" FontSize="11"
+                                ToolTip="Удалить выбранный прибор учёта"/>
+                    </Grid>
 
                     <DataGrid Grid.Row="1"
                               ItemsSource="{Binding Meters}"
@@ -91,15 +98,25 @@
 
             <GridSplitter Grid.Column="1" HorizontalAlignment="Stretch" Background="Transparent"/>
 
-            <!-- Правая колонка: Журнал переданных показаний и начислений -->
-            <Border Grid.Column="2" Style="{StaticResource CardBorderStyle}" Margin="0">
+<Border Grid.Column="2" Style="{StaticResource CardBorderStyle}" Margin="0">
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto"/>
                         <RowDefinition Height="*"/>
                     </Grid.RowDefinitions>
 
-                    <TextBlock Grid.Row="0" Text="Журнал ежемесячных показаний и расчёта начислений:" Style="{StaticResource SectionHeaderStyle}" Margin="0,0,0,8"/>
+                    <Grid Grid.Row="0" Margin="0,0,0,8">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Grid.Column="0" Text="Журнал показаний и начислений:" Style="{StaticResource SectionHeaderStyle}" Margin="0" VerticalAlignment="Center"/>
+                        <Button Grid.Column="1" Content="Удалить запись"
+                                Style="{StaticResource SecondaryButtonStyle}"
+                                Command="{Binding DeleteReadingCommand}"
+                                Height="26" Padding="8,0" FontSize="11"
+                                ToolTip="Удалить выбранное показание"/>
+                    </Grid>
 
                     <DataGrid Grid.Row="1"
                               ItemsSource="{Binding Readings}"

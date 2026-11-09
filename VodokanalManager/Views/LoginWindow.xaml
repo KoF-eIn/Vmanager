@@ -1,117 +1,85 @@
-<Window x:Class="VodokanalManager.Views.LoginWindow"
+﻿<Window x:Class="VodokanalManager.Views.LoginWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="Авторизация — МУП «Водоканал-Сервис»"
-        Height="540" Width="440"
+        Title="Авторизация — ООО «Водоканал-Сервис»"
+        Height="470" Width="430"
+        MinHeight="430" MinWidth="380"
         WindowStartupLocation="CenterScreen"
-        ResizeMode="NoResize"
         Background="{StaticResource BackgroundBrush}">
 
-    <Border Padding="28" Background="{StaticResource CardBackgroundBrush}" Margin="16" CornerRadius="8" BorderBrush="{StaticResource BorderMediumBrush}" BorderThickness="1">
-        <StackPanel VerticalAlignment="Center">
+    <Border Padding="24" Background="{StaticResource CardBackgroundBrush}" Margin="16" CornerRadius="8" BorderBrush="{StaticResource BorderMediumBrush}" BorderThickness="1">
+        <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+            <StackPanel VerticalAlignment="Center">
 
-            <!-- Логотип и заголовок -->
-            <StackPanel HorizontalAlignment="Center" Margin="0,0,0,20">
-                <Path Data="{StaticResource IconWaterDrop}"
-                      Fill="{StaticResource BrandPrimaryBrush}"
-                      Width="44" Height="44"
-                      Stretch="Uniform"
-                      HorizontalAlignment="Center"
-                      Margin="0,0,0,10"/>
+<StackPanel HorizontalAlignment="Center" Margin="0,0,0,20">
+                    <Path Data="{StaticResource IconWaterDrop}"
+                          Fill="{StaticResource BrandPrimaryBrush}"
+                          Width="44" Height="44"
+                          Stretch="Uniform"
+                          HorizontalAlignment="Center"
+                          Margin="0,0,0,10"/>
 
-                <TextBlock Text="МУП «Водоканал-Сервис»"
-                           FontSize="18"
-                           FontWeight="Bold"
-                           Foreground="{StaticResource HeaderBackgroundBrush}"
+                    <TextBlock Text="ООО «Водоканал-Сервис»"
+                               FontSize="18"
+                               FontWeight="Bold"
+                               Foreground="{StaticResource HeaderBackgroundBrush}"
+                               HorizontalAlignment="Center"/>
+
+                    <TextBlock Text="г. Канск • Абонентский учёт и платежи"
+                               FontSize="12"
+                               Foreground="{StaticResource TextSecondaryBrush}"
+                               HorizontalAlignment="Center"
+                               Margin="0,4,0,0"/>
+                </StackPanel>
+
+<Border Background="{StaticResource DangerLightBrush}"
+                        BorderBrush="{StaticResource DangerBrush}"
+                        BorderThickness="1"
+                        CornerRadius="4"
+                        Padding="10,8"
+                        Margin="0,0,0,14"
+                        Visibility="{Binding ErrorMessage, Converter={StaticResource StringToVisibilityConverter}}">
+                    <TextBlock Text="{Binding ErrorMessage}"
+                               Foreground="{StaticResource DangerBrush}"
+                               FontSize="12"
+                               TextWrapping="Wrap"/>
+                </Border>
+
+<TextBlock Text="Имя пользователя (логин):" Style="{StaticResource LabelTextStyle}"/>
+                <TextBox Text="{Binding Login, UpdateSourceTrigger=PropertyChanged}"
+                         Margin="0,0,0,14"/>
+
+<TextBlock Text="Пароль:" Style="{StaticResource LabelTextStyle}"/>
+                <PasswordBox x:Name="UserPasswordBox"
+                             PasswordChanged="UserPasswordBox_PasswordChanged"
+                             Margin="0,0,0,20"/>
+
+<Button Content="Войти в систему"
+                        Command="{Binding LoginCommand}"
+                        Height="40"
+                        FontSize="14"
+                        FontWeight="SemiBold"
+                        Margin="0,0,0,16"/>
+
+                <Border Background="{StaticResource CardAltBackgroundBrush}"
+                        BorderBrush="{StaticResource BorderLightBrush}"
+                        BorderThickness="1"
+                        CornerRadius="6"
+                        Padding="10"
+                        Margin="0,0,0,12">
+                    <TextBlock Text="💡 Для входа используйте учётную запись сотрудника или номер лицевого счёта абонента."
+                               FontSize="11"
+                               Foreground="{StaticResource TextSecondaryBrush}"
+                               TextWrapping="Wrap"
+                               HorizontalAlignment="Center"/>
+                </Border>
+
+                <TextBlock Text="Красноярский край, г. Канск • Версия 1.0"
+                           FontSize="10"
+                           Foreground="{StaticResource TextMutedBrush}"
                            HorizontalAlignment="Center"/>
 
-                <TextBlock Text="Абонентский учёт и расчёт платежей"
-                           FontSize="12"
-                           Foreground="{StaticResource TextSecondaryBrush}"
-                           HorizontalAlignment="Center"
-                           Margin="0,3,0,0"/>
             </StackPanel>
-
-            <!-- Баннер ошибки -->
-            <Border Background="{StaticResource DangerLightBrush}"
-                    BorderBrush="{StaticResource DangerBrush}"
-                    BorderThickness="1"
-                    CornerRadius="4"
-                    Padding="10,8"
-                    Margin="0,0,0,14"
-                    Visibility="{Binding ErrorMessage, Converter={StaticResource StringToVisibilityConverter}}">
-                <TextBlock Text="{Binding ErrorMessage}"
-                           Foreground="{StaticResource DangerBrush}"
-                           FontSize="12"
-                           TextWrapping="Wrap"/>
-            </Border>
-
-            <!-- Поле ввода логина -->
-            <TextBlock Text="Имя пользователя (логин):" Style="{StaticResource LabelTextStyle}"/>
-            <TextBox Text="{Binding Login, UpdateSourceTrigger=PropertyChanged}"
-                     Margin="0,0,0,14"/>
-
-            <!-- Поле ввода пароля -->
-            <TextBlock Text="Пароль:" Style="{StaticResource LabelTextStyle}"/>
-            <PasswordBox x:Name="UserPasswordBox"
-                         PasswordChanged="UserPasswordBox_PasswordChanged"
-                         Margin="0,0,0,18"/>
-
-            <!-- Кнопка входа -->
-            <Button Content="Войти в систему"
-                    Command="{Binding LoginCommand}"
-                    Height="38"
-                    FontSize="14"
-                    FontWeight="SemiBold"
-                    Margin="0,0,0,20"/>
-
-            <!-- Быстрый выбор для демонстрации и проверки -->
-            <Border Background="{StaticResource CardAltBackgroundBrush}"
-                    BorderBrush="{StaticResource BorderLightBrush}"
-                    BorderThickness="1"
-                    CornerRadius="6"
-                    Padding="10">
-                <StackPanel>
-                    <TextBlock Text="Быстрый вход для проверки ролей:"
-                               FontSize="11"
-                               FontWeight="SemiBold"
-                               Foreground="{StaticResource TextSecondaryBrush}"
-                               Margin="0,0,0,6"/>
-
-                    <WrapPanel HorizontalAlignment="Center">
-                        <Button Content="Админ"
-                                Style="{StaticResource SecondaryButtonStyle}"
-                                Height="26" Padding="8,0" Margin="2"
-                                Command="{Binding QuickFillCommand}" CommandParameter="admin"
-                                Click="QuickFill_Click"/>
-
-                        <Button Content="Оператор"
-                                Style="{StaticResource SecondaryButtonStyle}"
-                                Height="26" Padding="8,0" Margin="2"
-                                Command="{Binding QuickFillCommand}" CommandParameter="operator"
-                                Click="QuickFill_Click"/>
-
-                        <Button Content="Кассир"
-                                Style="{StaticResource SecondaryButtonStyle}"
-                                Height="26" Padding="8,0" Margin="2"
-                                Command="{Binding QuickFillCommand}" CommandParameter="kassir"
-                                Click="QuickFill_Click"/>
-
-                        <Button Content="Абонент (ЛК)"
-                                Style="{StaticResource SecondaryButtonStyle}"
-                                Height="26" Padding="8,0" Margin="2"
-                                Command="{Binding QuickFillCommand}" CommandParameter="subscriber"
-                                Click="QuickFill_Click"/>
-                    </WrapPanel>
-                </StackPanel>
-            </Border>
-
-            <TextBlock Text="г. Канск, Красноярский край • Версия 1.0"
-                       FontSize="10"
-                       Foreground="{StaticResource TextMutedBrush}"
-                       HorizontalAlignment="Center"
-                       Margin="0,16,0,0"/>
-
-        </StackPanel>
+        </ScrollViewer>
     </Border>
 </Window>

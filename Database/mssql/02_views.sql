@@ -1,4 +1,4 @@
--- Представления для MS SQL Server (совместимость с SQL Server 2014+)
+﻿
 
 IF OBJECT_ID(N'dbo.vw_SubscriberBalance', N'V') IS NOT NULL
     DROP VIEW dbo.vw_SubscriberBalance;
@@ -12,7 +12,6 @@ IF OBJECT_ID(N'dbo.vw_Consumption', N'V') IS NOT NULL
     DROP VIEW dbo.vw_Consumption;
 GO
 
--- 1. Представление расхода
 CREATE VIEW dbo.vw_Consumption AS
 SELECT 
     r.Id AS ReadingId,
@@ -35,7 +34,6 @@ FROM dbo.MeterReadings r
 JOIN dbo.Meters m ON r.MeterId = m.Id;
 GO
 
--- 2. Представление начислений
 CREATE VIEW dbo.vw_Charges AS
 SELECT 
     c.ReadingId,
@@ -65,7 +63,6 @@ OUTER APPLY (
 ) t;
 GO
 
--- 3. Представление баланса абонентов
 CREATE VIEW dbo.vw_SubscriberBalance AS
 SELECT 
     s.Id AS SubscriberId,

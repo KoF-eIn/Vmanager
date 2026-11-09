@@ -1,33 +1,27 @@
--- Схема базы данных SQLite для МУП "Водоканал-Сервис"
--- Таблицы приведены к третьей нормальной форме (3НФ)
+﻿
 
 PRAGMA foreign_keys = ON;
 
--- Служебная информация о приложении и версии схемы
 CREATE TABLE IF NOT EXISTS AppInfo (
     Name TEXT NOT NULL PRIMARY KEY,
     SchemaVersion INTEGER NOT NULL
 );
 
--- Пользовательские настройки приложения
 CREATE TABLE IF NOT EXISTS AppSettings (
     SettingKey TEXT NOT NULL PRIMARY KEY,
     SettingValue TEXT NOT NULL
 );
 
--- Роли пользователей в системе
 CREATE TABLE IF NOT EXISTS Roles (
     Id INTEGER PRIMARY KEY,
     Name TEXT NOT NULL UNIQUE
 );
 
--- Типы абонентов (Физическое лицо / Организация)
 CREATE TABLE IF NOT EXISTS SubscriberTypes (
     Id INTEGER PRIMARY KEY,
     Name TEXT NOT NULL UNIQUE
 );
 
--- Абоненты водоканала
 CREATE TABLE IF NOT EXISTS Subscribers (
     Id INTEGER PRIMARY KEY AUTOINCREMENT,
     AccountNo TEXT NOT NULL UNIQUE,
@@ -36,30 +30,30 @@ CREATE TABLE IF NOT EXISTS Subscribers (
     Address TEXT NOT NULL,
     Phone TEXT,
     IsActive INTEGER NOT NULL DEFAULT 1,
+    IsDemo INTEGER NOT NULL DEFAULT 0,
     FOREIGN KEY (SubscriberTypeId) REFERENCES SubscriberTypes(Id)
 );
 
--- Учётные записи пользователей
 CREATE TABLE IF NOT EXISTS Users (
     Id INTEGER PRIMARY KEY AUTOINCREMENT,
     Login TEXT NOT NULL UNIQUE,
     PasswordHash TEXT NOT NULL,
     Salt TEXT NOT NULL,
+    InitialPassword TEXT,
     FullName TEXT NOT NULL,
     RoleId INTEGER NOT NULL,
     IsActive INTEGER NOT NULL DEFAULT 1,
     SubscriberId INTEGER,
+    IsDemo INTEGER NOT NULL DEFAULT 0,
     FOREIGN KEY (RoleId) REFERENCES Roles(Id),
     FOREIGN KEY (SubscriberId) REFERENCES Subscribers(Id) ON DELETE SET NULL
 );
 
--- Виды коммунальных услуг (ХВС / ГВС)
 CREATE TABLE IF NOT EXISTS ServiceTypes (
     Id INTEGER PRIMARY KEY,
     Name TEXT NOT NULL UNIQUE
 );
 
--- Приборы учёта (счётчики)
 CREATE TABLE IF NOT EXISTS Meters (
     Id INTEGER PRIMARY KEY AUTOINCREMENT,
     SubscriberId INTEGER NOT NULL,
@@ -67,24 +61,24 @@ CREATE TABLE IF NOT EXISTS Meters (
     SerialNo TEXT NOT NULL UNIQUE,
     InstallDate TEXT NOT NULL,
     IsActive INTEGER NOT NULL DEFAULT 1,
+    IsDemo INTEGER NOT NULL DEFAULT 0,
     FOREIGN KEY (SubscriberId) REFERENCES Subscribers(Id) ON DELETE CASCADE,
     FOREIGN KEY (ServiceTypeId) REFERENCES ServiceTypes(Id)
 );
 
--- Показания приборов учёта
 CREATE TABLE IF NOT EXISTS MeterReadings (
     Id INTEGER PRIMARY KEY AUTOINCREMENT,
     MeterId INTEGER NOT NULL,
     Period TEXT NOT NULL,
     ValueL INTEGER NOT NULL,
     UserId INTEGER,
+    IsDemo INTEGER NOT NULL DEFAULT 0,
     FOREIGN KEY (MeterId) REFERENCES Meters(Id) ON DELETE CASCADE,
     FOREIGN KEY (UserId) REFERENCES Users(Id) ON DELETE SET NULL,
     CONSTRAINT UQ_MeterReadings_Period UNIQUE (MeterId, Period),
     CONSTRAINT CK_MeterReadings_ValueL CHECK (ValueL >= 0)
 );
 
--- Тарифы на услуги водоснабжения
 CREATE TABLE IF NOT EXISTS Tariffs (
     Id INTEGER PRIMARY KEY AUTOINCREMENT,
     ServiceTypeId INTEGER NOT NULL,
@@ -95,13 +89,11 @@ CREATE TABLE IF NOT EXISTS Tariffs (
     CONSTRAINT CK_Tariffs_Price CHECK (PriceKopPerM3 > 0)
 );
 
--- Способы оплаты
 CREATE TABLE IF NOT EXISTS PaymentMethods (
     Id INTEGER PRIMARY KEY,
     Name TEXT NOT NULL UNIQUE
 );
 
--- Платежи абонентов
 CREATE TABLE IF NOT EXISTS Payments (
     Id INTEGER PRIMARY KEY AUTOINCREMENT,
     SubscriberId INTEGER NOT NULL,
@@ -109,13 +101,13 @@ CREATE TABLE IF NOT EXISTS Payments (
     AmountKop INTEGER NOT NULL,
     PaymentMethodId INTEGER NOT NULL,
     UserId INTEGER,
+    IsDemo INTEGER NOT NULL DEFAULT 0,
     FOREIGN KEY (SubscriberId) REFERENCES Subscribers(Id) ON DELETE CASCADE,
     FOREIGN KEY (PaymentMethodId) REFERENCES PaymentMethods(Id),
     FOREIGN KEY (UserId) REFERENCES Users(Id) ON DELETE SET NULL,
     CONSTRAINT CK_Payments_Amount CHECK (AmountKop > 0)
 );
 
--- Индексы для оптимизации выборок и внешних ключей
 CREATE INDEX IF NOT EXISTS IX_Subscribers_AccountNo ON Subscribers(AccountNo);
 CREATE INDEX IF NOT EXISTS IX_Subscribers_Name ON Subscribers(Name);
 CREATE INDEX IF NOT EXISTS IX_Meters_SubscriberId ON Meters(SubscriberId);

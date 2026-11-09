@@ -1,4 +1,4 @@
-using System.Windows;
+﻿using System.Windows;
 using VodokanalManager.ViewModels;
 
 namespace VodokanalManager.Views
@@ -15,14 +15,6 @@ namespace VodokanalManager.Views
             if (DataContext is LoginViewModel vm)
             {
                 vm.Password = UserPasswordBox.Password;
-            }
-        }
-
-        private void QuickFill_Click(object sender, RoutedEventArgs e)
-        {
-            if (DataContext is LoginViewModel vm)
-            {
-                UserPasswordBox.Password = vm.Password;
             }
         }
     }

@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
@@ -22,21 +22,18 @@ namespace VodokanalManager.Services
 
             var sb = new StringBuilder();
 
-            // Заголовки столбцов
-            if (headers != null && headers.Length > 0)
+if (headers != null && headers.Length > 0)
             {
                 sb.AppendLine(string.Join(";", EscapeRow(headers)));
             }
 
-            // Данные строк
-            foreach (var item in items)
+foreach (var item in items)
             {
                 string[] values = rowSelector(item);
                 sb.AppendLine(string.Join(";", EscapeRow(values)));
             }
 
-            // Запись в UTF-8 с BOM (для корректного открытия в Excel)
-            File.WriteAllText(filePath, sb.ToString(), new UTF8Encoding(true));
+File.WriteAllText(filePath, sb.ToString(), new UTF8Encoding(true));
         }
 
         private static string[] EscapeRow(string[] row)

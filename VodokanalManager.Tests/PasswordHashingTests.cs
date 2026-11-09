@@ -1,4 +1,4 @@
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using VodokanalManager.Services;
 
 namespace VodokanalManager.Tests
@@ -39,8 +39,7 @@ namespace VodokanalManager.Tests
         {
             var hasher = new PasswordHasher();
 
-            // Предварительно рассчитанный хэш для 'admin'
-            string saltAdmin = "JTpn5IIfAH5rDZTTxChEWA==";
+string saltAdmin = "JTpn5IIfAH5rDZTTxChEWA==";
             string hashAdmin = "VuGeycb49ak2f12dyIjmjDCfJ/17J5utppF6dcGgslQ=";
 
             Assert.IsTrue(hasher.VerifyPassword("admin", hashAdmin, saltAdmin));

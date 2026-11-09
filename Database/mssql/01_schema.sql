@@ -1,7 +1,5 @@
--- Схема базы данных MS SQL Server для МУП "Водоканал-Сервис"
--- Совместимость с SQL Server 2014+
+﻿
 
--- Служебная информация о приложении и версии схемы
 IF NOT EXISTS (SELECT * FROM sys.tables WHERE name = N'AppInfo')
 BEGIN
     CREATE TABLE AppInfo (
@@ -10,7 +8,6 @@ BEGIN
     );
 END
 
--- Пользовательские настройки приложения
 IF NOT EXISTS (SELECT * FROM sys.tables WHERE name = N'AppSettings')
 BEGIN
     CREATE TABLE AppSettings (
@@ -19,7 +16,6 @@ BEGIN
     );
 END
 
--- Роли пользователей
 IF NOT EXISTS (SELECT * FROM sys.tables WHERE name = N'Roles')
 BEGIN
     CREATE TABLE Roles (
@@ -28,7 +24,6 @@ BEGIN
     );
 END
 
--- Типы абонентов
 IF NOT EXISTS (SELECT * FROM sys.tables WHERE name = N'SubscriberTypes')
 BEGIN
     CREATE TABLE SubscriberTypes (
@@ -37,7 +32,6 @@ BEGIN
     );
 END
 
--- Абоненты
 IF NOT EXISTS (SELECT * FROM sys.tables WHERE name = N'Subscribers')
 BEGIN
     CREATE TABLE Subscribers (
@@ -51,7 +45,6 @@ BEGIN
     );
 END
 
--- Пользователи
 IF NOT EXISTS (SELECT * FROM sys.tables WHERE name = N'Users')
 BEGIN
     CREATE TABLE Users (
@@ -66,7 +59,6 @@ BEGIN
     );
 END
 
--- Виды коммунальных услуг
 IF NOT EXISTS (SELECT * FROM sys.tables WHERE name = N'ServiceTypes')
 BEGIN
     CREATE TABLE ServiceTypes (
@@ -75,7 +67,6 @@ BEGIN
     );
 END
 
--- Приборы учёта (счётчики)
 IF NOT EXISTS (SELECT * FROM sys.tables WHERE name = N'Meters')
 BEGIN
     CREATE TABLE Meters (
@@ -88,7 +79,6 @@ BEGIN
     );
 END
 
--- Показания приборов учёта
 IF NOT EXISTS (SELECT * FROM sys.tables WHERE name = N'MeterReadings')
 BEGIN
     CREATE TABLE MeterReadings (
@@ -101,7 +91,6 @@ BEGIN
     );
 END
 
--- Тарифы на водоснабжение
 IF NOT EXISTS (SELECT * FROM sys.tables WHERE name = N'Tariffs')
 BEGIN
     CREATE TABLE Tariffs (
@@ -113,7 +102,6 @@ BEGIN
     );
 END
 
--- Способы оплаты
 IF NOT EXISTS (SELECT * FROM sys.tables WHERE name = N'PaymentMethods')
 BEGIN
     CREATE TABLE PaymentMethods (
@@ -122,7 +110,6 @@ BEGIN
     );
 END
 
--- Платежи
 IF NOT EXISTS (SELECT * FROM sys.tables WHERE name = N'Payments')
 BEGIN
     CREATE TABLE Payments (
@@ -135,7 +122,6 @@ BEGIN
     );
 END
 
--- Индексы
 IF NOT EXISTS (SELECT * FROM sys.indexes WHERE name = N'IX_Subscribers_AccountNo')
     CREATE NONCLUSTERED INDEX IX_Subscribers_AccountNo ON Subscribers(AccountNo);
 

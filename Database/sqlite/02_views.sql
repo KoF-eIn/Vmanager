@@ -1,7 +1,5 @@
--- Представления базы данных SQLite для расчёта расхода, начислений и баланса абонентов
+﻿
 
--- 1. Представление расхода по каждому показанию прибора учёта
--- Первое показание счётчика считается начальным (расход = 0)
 CREATE VIEW IF NOT EXISTS vw_Consumption AS
 SELECT 
     r.Id AS ReadingId,
@@ -23,8 +21,6 @@ SELECT
 FROM MeterReadings r
 JOIN Meters m ON r.MeterId = m.Id;
 
--- 2. Представление начислений с применением действующего тарифа
--- Формула начисления: (расход в литрах * тариф в копейках за м3 + 500) / 1000
 CREATE VIEW IF NOT EXISTS vw_Charges AS
 SELECT 
     c.ReadingId,
@@ -53,8 +49,6 @@ LEFT JOIN Tariffs t ON t.ServiceTypeId = c.ServiceTypeId
          AND t2.ValidFrom <= c.Period
    );
 
--- 3. Представление баланса и задолженности абонентов
--- Долг = Сумма всех начислений - Сумма всех платежей
 CREATE VIEW IF NOT EXISTS vw_SubscriberBalance AS
 SELECT 
     s.Id AS SubscriberId,

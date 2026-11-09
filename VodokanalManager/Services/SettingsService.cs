@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.IO;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -95,7 +95,7 @@ namespace VodokanalManager.Services
             }
             catch
             {
-                // Игнорируем ошибки записи настроек при отсутствии прав
+                
             }
         }
 

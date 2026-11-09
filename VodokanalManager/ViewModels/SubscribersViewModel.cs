@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 using System.Windows.Input;
@@ -25,7 +25,7 @@ namespace VodokanalManager.ViewModels
         private Subscriber _selectedSubscriber;
 
         private string _searchQuery = string.Empty;
-        private int _selectedSubscriberTypeId; // 0 = Все
+        private int _selectedSubscriberTypeId; 
         private bool _onlyWithDebt;
         private bool _isBusy;
         private string _errorMessage = string.Empty;
@@ -116,8 +116,10 @@ namespace VodokanalManager.ViewModels
         public ICommand AddSubscriberCommand { get; }
         public ICommand EditSubscriberCommand { get; }
         public ICommand ToggleActiveCommand { get; }
+        public ICommand DeleteSubscriberCommand { get; }
 
         public Func<Subscriber, Task<bool>> OpenEditDialogAsync { get; set; }
+        public Action OnSubscriberChanged { get; set; }
 
         public SubscribersViewModel(
             ISubscriberRepository subscriberRepository,
@@ -143,6 +145,7 @@ namespace VodokanalManager.ViewModels
             AddSubscriberCommand = new AsyncRelayCommand(AddSubscriberAsync, () => CanManage);
             EditSubscriberCommand = new AsyncRelayCommand(EditSubscriberAsync, () => CanManage && SelectedSubscriber != null);
             ToggleActiveCommand = new AsyncRelayCommand(ToggleActiveAsync, () => CanManage && SelectedSubscriber != null);
+            DeleteSubscriberCommand = new AsyncRelayCommand(DeleteSubscriberAsync, () => CanManage && SelectedSubscriber != null);
 
             _ = LoadSubscribersAsync();
         }
@@ -163,7 +166,7 @@ namespace VodokanalManager.ViewModels
 
                 if (SelectedSubscriber != null)
                 {
-                    // Сохраняем выделение абонента
+                    
                     var current = list.Find(s => s.Id == SelectedSubscriber.Id);
                     SelectedSubscriber = current;
                 }
@@ -214,6 +217,7 @@ namespace VodokanalManager.ViewModels
             {
                 StatusMessage = $"Абонент '{newSubscriber.Name}' успешно добавлен. Личный кабинет создан (логин: {newSubscriber.AccountNo}).";
                 await LoadSubscribersAsync();
+                OnSubscriberChanged?.Invoke();
             }
         }
 
@@ -238,6 +242,45 @@ namespace VodokanalManager.ViewModels
             {
                 StatusMessage = $"Данные абонента '{clone.Name}' обновлены.";
                 await LoadSubscribersAsync();
+                OnSubscriberChanged?.Invoke();
+            }
+        }
+
+                private async Task DeleteSubscriberAsync()
+        {
+            if (SelectedSubscriber == null)
+            {
+                ErrorMessage = "Выберите абонента для удаления.";
+                return;
+            }
+
+            var confirm = System.Windows.MessageBox.Show(
+                $"Вы действительно хотите удалить абонента '{SelectedSubscriber.Name}' (л/с {SelectedSubscriber.AccountNo})?\n\nВнимание: Все приборы учёта, внесённые показания, история платежей и учётная запись абонента также будут удалены!",
+                "Подтверждение удаления абонента",
+                System.Windows.MessageBoxButton.YesNo,
+                System.Windows.MessageBoxImage.Warning);
+
+            if (confirm != System.Windows.MessageBoxResult.Yes) return;
+
+            IsBusy = true;
+            try
+            {
+                int subId = SelectedSubscriber.Id;
+                string subName = SelectedSubscriber.Name;
+                await System.Threading.Tasks.Task.Run(() => _subscriberRepository.Delete(subId));
+                SelectedSubscriber = null;
+                StatusMessage = $"Абонент '{subName}' и все связанные данные успешно удалены.";
+                await LoadSubscribersAsync();
+                OnSubscriberChanged?.Invoke();
+            }
+            catch (Exception ex)
+            {
+                ErrorMessage = "Ошибка при удалении абонента: " + ex.Message;
+                _logger.LogError("Ошибка удаления абонента", ex);
+            }
+            finally
+            {
+                IsBusy = false;
             }
         }
 
@@ -253,6 +296,7 @@ namespace VodokanalManager.ViewModels
                 SelectedSubscriber.IsActive = newStatus;
                 StatusMessage = $"Статус абонента изменен на '{(newStatus ? "Активен" : "Отключен")}'.";
                 await LoadSubscribersAsync();
+                OnSubscriberChanged?.Invoke();
             }
             catch (Exception ex)
             {

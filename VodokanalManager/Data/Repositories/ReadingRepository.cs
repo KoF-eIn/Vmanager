@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Globalization;
@@ -12,6 +12,7 @@ namespace VodokanalManager.Data.Repositories
         List<MeterReading> GetAll(int? subscriberId = null, int? meterId = null, DateTime? period = null);
         MeterReading GetLastReading(int meterId);
         void AddReading(int meterId, DateTime period, long valueL, int? userId);
+        void DeleteReading(int readingId);
     }
 
     public class ReadingRepository : IReadingRepository
@@ -148,7 +149,7 @@ namespace VodokanalManager.Data.Repositories
             {
                 try
                 {
-                    // 1. Проверка: показание за этот месяц уже существует?
+                    
                     using (var cmd = conn.CreateCommand())
                     {
                         cmd.Transaction = trans;
@@ -163,8 +164,7 @@ namespace VodokanalManager.Data.Repositories
                         }
                     }
 
-                    // 2. Проверка: показание не меньше предыдущего
-                    using (var cmd = conn.CreateCommand())
+using (var cmd = conn.CreateCommand())
                     {
                         cmd.Transaction = trans;
                         cmd.CommandText = @"
@@ -193,8 +193,7 @@ namespace VodokanalManager.Data.Repositories
                         }
                     }
 
-                    // 3. Проверка: действующий тариф на период существует?
-                    using (var cmd = conn.CreateCommand())
+using (var cmd = conn.CreateCommand())
                     {
                         cmd.Transaction = trans;
                         cmd.CommandText = @"
@@ -214,8 +213,7 @@ namespace VodokanalManager.Data.Repositories
                         }
                     }
 
-                    // 4. Вставка показания
-                    using (var cmd = conn.CreateCommand())
+using (var cmd = conn.CreateCommand())
                     {
                         cmd.Transaction = trans;
                         cmd.CommandText = @"
@@ -236,6 +234,20 @@ namespace VodokanalManager.Data.Repositories
                 {
                     trans.Rollback();
                     throw;
+                }
+            }
+        }
+
+public void DeleteReading(int readingId)
+        {
+            using (var conn = _database.CreateConnection())
+            {
+                conn.Open();
+                using (var cmd = conn.CreateCommand())
+                {
+                    cmd.CommandText = "DELETE FROM MeterReadings WHERE Id = @Id;";
+                    AddParam(cmd, "@Id", readingId);
+                    cmd.ExecuteNonQuery();
                 }
             }
         }

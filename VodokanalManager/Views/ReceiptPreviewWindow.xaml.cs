@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Documents;
@@ -22,7 +22,7 @@ namespace VodokanalManager.Views
             if (printDialog.ShowDialog() == true)
             {
                 var paginator = ((IDocumentPaginatorSource)_document).DocumentPaginator;
-                printDialog.PrintDocument(paginator, "Квитанция МУП Водоканал г. Канск");
+                printDialog.PrintDocument(paginator, "Квитанция ООО Водоканал-Сервис г. Канск");
             }
         }
 

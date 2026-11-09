@@ -1,13 +1,13 @@
-<Window x:Class="VodokanalManager.Views.PaymentEditDialog"
+﻿<Window x:Class="VodokanalManager.Views.PaymentEditDialog"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="Приём платежа"
-        Height="470" Width="460"
+        Height="520" Width="480"
+        MinHeight="440" MinWidth="440"
         WindowStartupLocation="CenterOwner"
-        ResizeMode="NoResize"
         Background="{StaticResource BackgroundBrush}">
 
-    <Border Margin="16" Padding="20" Background="{StaticResource CardBackgroundBrush}" BorderBrush="{StaticResource BorderMediumBrush}" BorderThickness="1" CornerRadius="6">
+    <Border Margin="14" Padding="18" Background="{StaticResource CardBackgroundBrush}" BorderBrush="{StaticResource BorderMediumBrush}" BorderThickness="1" CornerRadius="6">
         <Grid>
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
@@ -22,43 +22,44 @@
                 <TextBlock x:Name="ErrorTextBlock" Foreground="{StaticResource DangerBrush}" FontSize="12" TextWrapping="Wrap"/>
             </Border>
 
-            <StackPanel Grid.Row="2">
-                <TextBlock Text="Абонент (плательщик):" Style="{StaticResource LabelTextStyle}"/>
-                <ComboBox x:Name="SubscriberComboBox" DisplayMemberPath="Name" SelectionChanged="SubscriberComboBox_SelectionChanged" Margin="0,0,0,12"/>
+            <ScrollViewer Grid.Row="2" VerticalScrollBarVisibility="Auto" Padding="0,0,8,0">
+                <StackPanel>
+                    <TextBlock Text="Абонент (плательщик):" Style="{StaticResource LabelTextStyle}"/>
+                    <ComboBox x:Name="SubscriberComboBox" DisplayMemberPath="Name" SelectionChanged="SubscriberComboBox_SelectionChanged" Margin="0,0,0,12"/>
 
-                <!-- Карточка текущего долга абонента -->
-                <Border Background="{StaticResource CardAltBackgroundBrush}" BorderBrush="{StaticResource BorderLightBrush}" BorderThickness="1" CornerRadius="4" Padding="10" Margin="0,0,0,12">
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="Auto"/>
-                        </Grid.ColumnDefinitions>
-                        <StackPanel Grid.Column="0">
-                            <TextBlock x:Name="AccountInfoText" Text="Лицевой счёт: ..." FontSize="12" Foreground="{StaticResource TextSecondaryBrush}"/>
-                            <TextBlock x:Name="AddressInfoText" Text="Адрес: ..." FontSize="11" Foreground="{StaticResource TextMutedBrush}" Margin="0,2,0,0"/>
-                        </StackPanel>
-                        <StackPanel Grid.Column="1" HorizontalAlignment="Right">
-                            <TextBlock Text="Текущий долг:" FontSize="10" Foreground="{StaticResource TextMutedBrush}"/>
-                            <TextBlock x:Name="DebtInfoText" Text="0,00 ₽" FontSize="14" FontWeight="Bold" Foreground="{StaticResource DangerBrush}"/>
-                        </StackPanel>
-                    </Grid>
-                </Border>
+<Border Background="{StaticResource CardAltBackgroundBrush}" BorderBrush="{StaticResource BorderLightBrush}" BorderThickness="1" CornerRadius="4" Padding="10" Margin="0,0,0,12">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <StackPanel Grid.Column="0">
+                                <TextBlock x:Name="AccountInfoText" Text="Лицевой счёт: ..." FontSize="12" Foreground="{StaticResource TextSecondaryBrush}"/>
+                                <TextBlock x:Name="AddressInfoText" Text="Адрес: ..." FontSize="11" Foreground="{StaticResource TextMutedBrush}" Margin="0,2,0,0"/>
+                            </StackPanel>
+                            <StackPanel Grid.Column="1" HorizontalAlignment="Right">
+                                <TextBlock Text="Текущий долг:" FontSize="10" Foreground="{StaticResource TextMutedBrush}"/>
+                                <TextBlock x:Name="DebtInfoText" Text="0,00 ₽" FontSize="14" FontWeight="Bold" Foreground="{StaticResource DangerBrush}"/>
+                            </StackPanel>
+                        </Grid>
+                    </Border>
 
-                <TextBlock Text="Дата совершения платежа:" Style="{StaticResource LabelTextStyle}"/>
-                <DatePicker x:Name="PaymentDatePicker" Margin="0,0,0,12"/>
+                    <TextBlock Text="Дата совершения платежа:" Style="{StaticResource LabelTextStyle}"/>
+                    <DatePicker x:Name="PaymentDatePicker" Margin="0,0,0,12"/>
 
-                <TextBlock Text="Способ оплаты:" Style="{StaticResource LabelTextStyle}"/>
-                <ComboBox x:Name="PaymentMethodComboBox" Margin="0,0,0,12">
-                    <ComboBoxItem Content="Наличные" Tag="1" IsSelected="True"/>
-                    <ComboBoxItem Content="Банковская карта" Tag="2"/>
-                    <ComboBoxItem Content="Банковский перевод" Tag="3"/>
-                </ComboBox>
+                    <TextBlock Text="Способ оплаты:" Style="{StaticResource LabelTextStyle}"/>
+                    <ComboBox x:Name="PaymentMethodComboBox" Margin="0,0,0,12">
+                        <ComboBoxItem Content="Наличные" Tag="1" IsSelected="True"/>
+                        <ComboBoxItem Content="Банковская карта" Tag="2"/>
+                        <ComboBoxItem Content="Банковский перевод" Tag="3"/>
+                    </ComboBox>
 
-                <TextBlock Text="Сумма к оплате, ₽:" Style="{StaticResource LabelTextStyle}"/>
-                <TextBox x:Name="AmountTextBox" FontSize="15" FontWeight="Bold" Margin="0,0,0,12"/>
-            </StackPanel>
+                    <TextBlock Text="Сумма к оплате, ₽:" Style="{StaticResource LabelTextStyle}"/>
+                    <TextBox x:Name="AmountTextBox" FontSize="15" FontWeight="Bold" Margin="0,0,0,12"/>
+                </StackPanel>
+            </ScrollViewer>
 
-            <StackPanel Grid.Row="3" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,12,0,0">
+            <StackPanel Grid.Row="3" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,14,0,0">
                 <Button Content="Провести платёж" Click="SaveButton_Click" Margin="0,0,8,0" Width="140"/>
                 <Button Content="Отмена" Style="{StaticResource SecondaryButtonStyle}" Click="CancelButton_Click" Width="90"/>
             </StackPanel>

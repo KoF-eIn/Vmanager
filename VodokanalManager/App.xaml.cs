@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Globalization;
 using System.Threading;
 using System.Windows;
@@ -22,27 +22,26 @@ namespace VodokanalManager
         private IReceiptPrintService _receiptPrintService;
         private ICsvExportService _csvExportService;
 
+        public IDatabase Database => _database;
+
         protected override void OnStartup(StartupEventArgs e)
         {
             base.OnStartup(e);
 
-            // 1. Установка русской локали для интерфейса, дат и чисел
-            var russianCulture = new CultureInfo("ru-RU");
+var russianCulture = new CultureInfo("ru-RU");
             Thread.CurrentThread.CurrentCulture = russianCulture;
             Thread.CurrentThread.CurrentUICulture = russianCulture;
             FrameworkElement.LanguageProperty.OverrideMetadata(
                 typeof(FrameworkElement),
                 new FrameworkPropertyMetadata(XmlLanguage.GetLanguage(russianCulture.IetfLanguageTag)));
 
-            // 2. Инициализация ключевых сервисов
-            _settingsService = new SettingsService();
+_settingsService = new SettingsService();
             _loggerService = new LoggerService();
             _passwordHasher = new PasswordHasher();
             _receiptPrintService = new ReceiptPrintService();
             _csvExportService = new CsvExportService();
 
-            // 3. Глобальные обработчики исключений
-            AppDomain.CurrentDomain.UnhandledException += (s, args) =>
+AppDomain.CurrentDomain.UnhandledException += (s, args) =>
             {
                 var ex = args.ExceptionObject as Exception;
                 _loggerService.LogError("Неперехваченное системное исключение (AppDomain)", ex);
@@ -56,23 +55,30 @@ namespace VodokanalManager
             DispatcherUnhandledException += (s, args) =>
             {
                 _loggerService.LogError("Неперехваченное исключение интерфейса (Dispatcher)", args.Exception);
+                string msg = args.Exception.Message;
+                if (args.Exception.InnerException != null)
+                {
+                    msg += "\n\nДетали: " + args.Exception.InnerException.Message;
+                }
                 MessageBox.Show(
-                    "Ошибка выполнения операции:\n" + args.Exception.Message,
+                    "Ошибка выполнения операции:\n" + msg,
                     "Ошибка",
                     MessageBoxButton.OK,
                     MessageBoxImage.Warning);
                 args.Handled = true;
             };
 
-            // 4. Подключение и инициализация базы данных
-            try
+try
             {
                 string customPath = _settingsService.Settings.CustomDatabasePath;
+                if (!string.IsNullOrWhiteSpace(customPath) && !System.IO.File.Exists(customPath))
+                {
+                    customPath = null;
+                }
                 _database = new SqliteDatabase(customPath);
                 _databaseInitializer = new DatabaseInitializer(_database);
 
-                // Автоматическое создание схемы и демо-данных при первом запуске
-                _databaseInitializer.Initialize(_settingsService.Settings.AutoFillDemoData);
+_databaseInitializer.Initialize(autoFillDemoData: false);
 
                 _loggerService.LogInfo($"База данных готова к работе: {_database.DatabasePath}");
             }
@@ -88,8 +94,7 @@ namespace VodokanalManager
                 return;
             }
 
-            // 5. Запуск окна авторизации
-            ShowLoginWindow();
+ShowLoginWindow();
         }
 
         private void ShowLoginWindow()

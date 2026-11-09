@@ -1,4 +1,4 @@
-using System.Windows;
+﻿using System.Windows;
 using VodokanalManager.ViewModels;
 
 namespace VodokanalManager.Views
@@ -15,18 +15,17 @@ namespace VodokanalManager.Views
         {
             if (DataContext is MainViewModel vm)
             {
-                // Настройка модальных окон для SubscribersVM
+                
                 if (vm.SubscribersVM != null)
                 {
                     vm.SubscribersVM.OpenEditDialogAsync = async (subscriber) =>
                     {
-                        var dialog = new SubscriberEditDialog(subscriber) { Owner = this };
+                        var dialog = new SubscriberEditDialog(subscriber, vm.Database, vm.PasswordHasher) { Owner = this };
                         return dialog.ShowDialog() == true;
                     };
                 }
 
-                // Настройка модальных окон для MetersReadingsVM
-                if (vm.MetersReadingsVM != null)
+if (vm.MetersReadingsVM != null)
                 {
                     vm.MetersReadingsVM.OpenAddReadingDialogAsync = async (meter) =>
                     {
@@ -41,8 +40,7 @@ namespace VodokanalManager.Views
                     };
                 }
 
-                // Настройка модальных окон для PaymentsVM
-                if (vm.PaymentsVM != null)
+if (vm.PaymentsVM != null)
                 {
                     vm.PaymentsVM.OpenNewPaymentDialogAsync = async (defaultSub) =>
                     {
@@ -57,18 +55,16 @@ namespace VodokanalManager.Views
                     };
                 }
 
-                // Настройка модальных окон для AdministrationVM
-                if (vm.AdministrationVM != null)
+if (vm.AdministrationVM != null)
                 {
                     vm.AdministrationVM.OpenUserEditDialogAsync = async (user) =>
                     {
-                        var dialog = new UserEditDialog(user) { Owner = this };
+                        var dialog = new UserEditDialog(user, vm.Database, vm.PasswordHasher) { Owner = this };
                         return dialog.ShowDialog() == true;
                     };
                 }
 
-                // Настройка модальных окон для SubscriberPortalVM
-                if (vm.SubscriberPortalVM != null)
+if (vm.SubscriberPortalVM != null)
                 {
                     vm.SubscriberPortalVM.OpenReceiptPreview = (flowDoc) =>
                     {

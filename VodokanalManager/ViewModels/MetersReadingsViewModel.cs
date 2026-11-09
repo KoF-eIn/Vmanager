@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 using System.Windows.Input;
@@ -115,6 +115,8 @@ namespace VodokanalManager.ViewModels
         public ICommand AddReadingCommand { get; }
         public ICommand AddMeterCommand { get; }
         public ICommand DeactivateMeterCommand { get; }
+        public ICommand DeleteMeterCommand { get; }
+        public ICommand DeleteReadingCommand { get; }
 
         public Func<Meter, Task<bool>> OpenAddReadingDialogAsync { get; set; }
         public Func<Subscriber, Task<bool>> OpenAddMeterDialogAsync { get; set; }
@@ -138,6 +140,8 @@ namespace VodokanalManager.ViewModels
             AddReadingCommand = new AsyncRelayCommand(AddReadingAsync, () => CanManage && SelectedMeter != null && SelectedMeter.IsActive);
             AddMeterCommand = new AsyncRelayCommand(AddMeterAsync, () => CanManage);
             DeactivateMeterCommand = new AsyncRelayCommand(DeactivateMeterAsync, () => CanManage && SelectedMeter != null && SelectedMeter.IsActive);
+            DeleteMeterCommand = new AsyncRelayCommand(DeleteMeterAsync, () => CanManage && SelectedMeter != null);
+            DeleteReadingCommand = new AsyncRelayCommand(DeleteReadingAsync, () => CanManage && SelectedReading != null);
 
             _ = LoadAllDataAsync();
         }
@@ -238,6 +242,78 @@ namespace VodokanalManager.ViewModels
             catch (Exception ex)
             {
                 ErrorMessage = "Ошибка вывода прибора из эксплуатации: " + ex.Message;
+            }
+            finally
+            {
+                IsBusy = false;
+            }
+        }
+        private async Task DeleteMeterAsync()
+        {
+            if (SelectedMeter == null)
+            {
+                ErrorMessage = "Выберите прибор учёта для удаления.";
+                return;
+            }
+
+            var confirm = System.Windows.MessageBox.Show(
+                $"Вы действительно хотите удалить прибор учёта №{SelectedMeter.SerialNo}?\n\nВнимание: Все сохранённые показания этого прибора также будут безвозвратно удалены!",
+                "Подтверждение удаления прибора учёта",
+                System.Windows.MessageBoxButton.YesNo,
+                System.Windows.MessageBoxImage.Warning);
+
+            if (confirm != System.Windows.MessageBoxResult.Yes) return;
+
+            IsBusy = true;
+            try
+            {
+                int meterId = SelectedMeter.Id;
+                string serial = SelectedMeter.SerialNo;
+                await System.Threading.Tasks.Task.Run(() => _meterRepository.Delete(meterId));
+                SelectedMeter = null;
+                StatusMessage = $"Прибор учёта №{serial} и его показания успешно удалены.";
+                await LoadAllDataAsync();
+            }
+            catch (Exception ex)
+            {
+                ErrorMessage = "Ошибка удаления прибора учёта: " + ex.Message;
+                _logger.LogError("Ошибка удаления счетчика", ex);
+            }
+            finally
+            {
+                IsBusy = false;
+            }
+        }
+
+        private async Task DeleteReadingAsync()
+        {
+            if (SelectedReading == null)
+            {
+                ErrorMessage = "Выберите показание для удаления.";
+                return;
+            }
+
+            var confirm = System.Windows.MessageBox.Show(
+                $"Вы действительно хотите удалить показание за {SelectedReading.Period:MM.yyyy} ({SelectedReading.ValueM3:N3} м³) по прибору №{SelectedReading.MeterSerialNo}?",
+                "Подтверждение удаления показания",
+                System.Windows.MessageBoxButton.YesNo,
+                System.Windows.MessageBoxImage.Question);
+
+            if (confirm != System.Windows.MessageBoxResult.Yes) return;
+
+            IsBusy = true;
+            try
+            {
+                int readingId = SelectedReading.Id;
+                await System.Threading.Tasks.Task.Run(() => _readingRepository.DeleteReading(readingId));
+                SelectedReading = null;
+                StatusMessage = "Показание успешно удалено.";
+                await LoadAllDataAsync();
+            }
+            catch (Exception ex)
+            {
+                ErrorMessage = "Ошибка удаления показания: " + ex.Message;
+                _logger.LogError("Ошибка удаления показания", ex);
             }
             finally
             {

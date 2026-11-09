@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Data;
 using System.Data.SQLite;
 using System.IO;
@@ -19,7 +19,12 @@ namespace VodokanalManager.Data
         {
             RegisterCustomFunctions();
 
-            if (!string.IsNullOrWhiteSpace(customPath))
+            string localDb = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "data.db");
+            if (File.Exists(localDb))
+            {
+                _databasePath = localDb;
+            }
+            else if (!string.IsNullOrWhiteSpace(customPath) && File.Exists(customPath))
             {
                 _databasePath = customPath;
             }
@@ -40,44 +45,57 @@ namespace VodokanalManager.Data
             }
             catch
             {
-                // Повторная регистрация игнорируется
+                
             }
         }
 
         private string DetermineDatabasePath()
         {
-            // 1. Попытка создания в %AppData%\VodokanalManager\data.db
-            try
-            {
-                string appData = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
-                string folder = Path.Combine(appData, "VodokanalManager");
-                if (!Directory.Exists(folder))
-                    Directory.CreateDirectory(folder);
-
-                return Path.Combine(folder, "data.db");
-            }
-            catch
-            {
-                // fallback
-            }
-
-            // 2. Попытка создания в app_data рядом с exe
+            
             try
             {
                 string baseDir = AppDomain.CurrentDomain.BaseDirectory;
-                string localFolder = Path.Combine(baseDir, "app_data");
-                if (!Directory.Exists(localFolder))
-                    Directory.CreateDirectory(localFolder);
+                string localFile = Path.Combine(baseDir, "data.db");
+                if (File.Exists(localFile))
+                    return localFile;
 
-                return Path.Combine(localFolder, "data.db");
+                string localFolderFile = Path.Combine(baseDir, "app_data", "data.db");
+                if (File.Exists(localFolderFile))
+                    return localFolderFile;
             }
             catch
             {
-                // fallback
+                
             }
 
-            // 3. Fallback в %TEMP%\VodokanalManager\data.db
-            string tempFolder = Path.Combine(Path.GetTempPath(), "VodokanalManager");
+try
+            {
+                string appData = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
+                string folder = Path.Combine(appData, "VodokanalManager");
+                string appDataFile = Path.Combine(folder, "data.db");
+                if (File.Exists(appDataFile))
+                    return appDataFile;
+
+try
+                {
+                    string testWrite = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, ".write_test");
+                    File.WriteAllText(testWrite, "1");
+                    File.Delete(testWrite);
+                    return Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "data.db");
+                }
+                catch
+                {
+                    if (!Directory.Exists(folder))
+                        Directory.CreateDirectory(folder);
+                    return appDataFile;
+                }
+            }
+            catch
+            {
+                
+            }
+
+string tempFolder = Path.Combine(Path.GetTempPath(), "VodokanalManager");
             if (!Directory.Exists(tempFolder))
                 Directory.CreateDirectory(tempFolder);
 

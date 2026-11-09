@@ -1,6 +1,4 @@
--- Полный скрипт первичного развертывания базы данных VodokanalDB для MS SQL Server
--- Выполняется по клавише F5 в SQL Server Management Studio (SSMS) или Visual Studio
--- Идемпотентен: повторный запуск проходит без ошибок и без потери данных
+﻿
 
 IF DB_ID(N'VodokanalDB') IS NULL 
     CREATE DATABASE VodokanalDB COLLATE Cyrillic_General_CI_AS;
@@ -8,8 +6,6 @@ GO
 
 USE VodokanalDB;
 GO
-
--- 1. ТАБЛИЦЫ, ОГРАНИЧЕНИЯ И ИНДЕКСЫ
 
 IF NOT EXISTS (SELECT * FROM sys.tables WHERE name = N'AppInfo')
 BEGIN
@@ -177,9 +173,6 @@ IF NOT EXISTS (SELECT * FROM sys.indexes WHERE name = N'IX_Tariffs_Service_Valid
     CREATE NONCLUSTERED INDEX IX_Tariffs_Service_ValidFrom ON Tariffs(ServiceTypeId, ValidFrom);
 GO
 
-
--- 2. ПРЕДСТАВЛЕНИЯ
-
 IF OBJECT_ID(N'dbo.vw_SubscriberBalance', N'V') IS NOT NULL
     DROP VIEW dbo.vw_SubscriberBalance;
 GO
@@ -270,9 +263,6 @@ LEFT JOIN (
 ) p ON s.Id = p.SubscriberId;
 GO
 
-
--- 3. СПРАВОЧНИКИ И НАЧАЛЬНЫЕ НАСТРОЙКИ
-
 IF NOT EXISTS (SELECT * FROM dbo.AppInfo WHERE Name = N'VodokanalManager')
     INSERT INTO dbo.AppInfo (Name, SchemaVersion) VALUES (N'VodokanalManager', 1);
 
@@ -337,10 +327,6 @@ IF NOT EXISTS (SELECT * FROM dbo.Tariffs WHERE ServiceTypeId = 2 AND ValidFrom =
     INSERT INTO dbo.Tariffs (ServiceTypeId, ValidFrom, PriceKopPerM3) VALUES (2, '2026-01-01', 17950);
 GO
 
-
--- 4. ТЕСТОВЫЙ ПРОГОН СЛОЖНЫХ ЗАПРОСОВ
-
--- Запрос А: Должники
 WITH ChargesCTE AS (
     SELECT SubscriberId, SUM(AmountKop) AS TotalChargedKop
     FROM dbo.vw_Charges GROUP BY SubscriberId
@@ -371,7 +357,6 @@ FROM DebtorsCTE
 ORDER BY DebtRank ASC;
 GO
 
--- Запрос Б: Подозрительный расход
 WITH ConsumptionHistoryCTE AS (
     SELECT 
         c.ReadingId, c.MeterId, c.SubscriberId, c.ServiceTypeId, c.MeterSerialNo, c.Period, c.ConsumptionL,

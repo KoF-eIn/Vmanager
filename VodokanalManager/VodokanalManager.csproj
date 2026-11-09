@@ -15,6 +15,7 @@
     <WarningLevel>4</WarningLevel>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <Deterministic>true</Deterministic>
+    <CodePage>65001</CodePage>
     <ApplicationManifest>app.manifest</ApplicationManifest>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -215,6 +216,7 @@
 
     <!-- Services -->
     <Compile Include="Services\PasswordHasher.cs" />
+    <Compile Include="Services\PasswordGenerator.cs" />
     <Compile Include="Services\SettingsService.cs" />
     <Compile Include="Services\LoggerService.cs" />
     <Compile Include="Services\CsvExportService.cs" />

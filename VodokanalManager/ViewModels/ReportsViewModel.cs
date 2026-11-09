@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Threading.Tasks;
@@ -17,7 +17,7 @@ namespace VodokanalManager.ViewModels
         private readonly ICsvExportService _csvExportService;
         private readonly ILoggerService _logger;
 
-        private int _selectedReportIndex = 0; // 0 = Должники, 1 = Подозрительный расход, 2 = Потребление, 3 = Касса
+        private int _selectedReportIndex = 0; 
         private DateTime _fromDate = DateTime.Today.AddMonths(-6);
         private DateTime _toDate = DateTime.Today;
 

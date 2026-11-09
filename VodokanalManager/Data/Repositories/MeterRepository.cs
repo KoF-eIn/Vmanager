@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Data;
 using VodokanalManager.Models;
@@ -12,6 +12,7 @@ namespace VodokanalManager.Data.Repositories
         Meter GetById(int id);
         void Add(Meter meter);
         void SetActive(int meterId, bool isActive);
+        void Delete(int meterId);
     }
 
     public class MeterRepository : IMeterRepository
@@ -162,6 +163,33 @@ namespace VodokanalManager.Data.Repositories
                 AddParam(cmd, "@id", meterId);
                 AddParam(cmd, "@active", isActive ? 1 : 0);
                 cmd.ExecuteNonQuery();
+            }
+        }
+
+        public void Delete(int meterId)
+        {
+            using (var conn = _database.CreateConnection())
+            using (var trans = conn.BeginTransaction())
+            {
+                try
+                {
+                    using (var cmd = conn.CreateCommand())
+                    {
+                        cmd.Transaction = trans;
+                        cmd.CommandText = @"
+                            DELETE FROM MeterReadings WHERE MeterId = @id;
+                            DELETE FROM Meters WHERE Id = @id;
+                        ";
+                        AddParam(cmd, "@id", meterId);
+                        cmd.ExecuteNonQuery();
+                    }
+                    trans.Commit();
+                }
+                catch
+                {
+                    trans.Rollback();
+                    throw;
+                }
             }
         }
 

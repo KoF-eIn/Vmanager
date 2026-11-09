@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Windows.Input;
 using VodokanalManager.Data;
 using VodokanalManager.Data.Repositories;
@@ -22,6 +22,10 @@ namespace VodokanalManager.ViewModels
         private object _currentView;
         private string _activeTabName = string.Empty;
 
+        public IDatabase Database => _database;
+        public IPasswordHasher PasswordHasher => _passwordHasher;
+        public DatabaseInitializer DatabaseInitializer => _databaseInitializer;
+
         public User CurrentUser
         {
             get => _currentUser;
@@ -39,6 +43,14 @@ namespace VodokanalManager.ViewModels
             get => _activeTabName;
             set => SetProperty(ref _activeTabName, value);
         }
+
+        public bool IsSubscribersActive => ActiveTabName == "Абоненты";
+        public bool IsMetersReadingsActive => ActiveTabName == "Приборы и показания";
+        public bool IsPaymentsActive => ActiveTabName == "Касса и платежи";
+        public bool IsTariffsActive => ActiveTabName == "Тарифы";
+        public bool IsReportsActive => ActiveTabName == "Аналитика и отчёты";
+        public bool IsAdministrationActive => ActiveTabName == "Система и база данных";
+        public bool IsSubscriberPortalActive => ActiveTabName == "Личный кабинет";
 
         public SubscribersViewModel SubscribersVM { get; private set; }
         public MetersReadingsViewModel MetersReadingsVM { get; private set; }
@@ -97,8 +109,7 @@ namespace VodokanalManager.ViewModels
             NavigateSubscriberPortalCommand = new RelayCommand(() => SwitchView(SubscriberPortalVM, "Личный кабинет"), () => CanViewSubscriberPortal);
             LogoutCommand = new RelayCommand(() => OnLogoutRequested?.Invoke());
 
-            // Начальный выбор вкладки в зависимости от роли
-            if (CurrentUser.IsSubscriber)
+if (CurrentUser.IsSubscriber)
             {
                 SwitchView(SubscriberPortalVM, "Личный кабинет");
             }
@@ -123,7 +134,16 @@ namespace VodokanalManager.ViewModels
             var reportRepo = new ReportRepository(_database);
 
             if (CanViewSubscribers)
+            {
                 SubscribersVM = new SubscribersViewModel(subRepo, meterRepo, _passwordHasher, _logger, CurrentUser);
+                SubscribersVM.OnSubscriberChanged = () =>
+                {
+                    if (AdministrationVM != null)
+                    {
+                        _ = AdministrationVM.LoadUsersAsync();
+                    }
+                };
+            }
 
             if (CanViewMetersReadings)
                 MetersReadingsVM = new MetersReadingsViewModel(meterRepo, readingRepo, tariffRepo, subRepo, _logger, CurrentUser);
@@ -155,6 +175,30 @@ namespace VodokanalManager.ViewModels
         {
             CurrentView = view;
             ActiveTabName = tabName;
+            OnPropertyChanged(nameof(IsSubscribersActive));
+            OnPropertyChanged(nameof(IsMetersReadingsActive));
+            OnPropertyChanged(nameof(IsPaymentsActive));
+            OnPropertyChanged(nameof(IsTariffsActive));
+            OnPropertyChanged(nameof(IsReportsActive));
+            OnPropertyChanged(nameof(IsAdministrationActive));
+            OnPropertyChanged(nameof(IsSubscriberPortalActive));
+
+if (view == AdministrationVM && AdministrationVM != null)
+            {
+                _ = AdministrationVM.LoadUsersAsync();
+            }
+            else if (view == SubscribersVM && SubscribersVM != null)
+            {
+                _ = SubscribersVM.LoadSubscribersAsync();
+            }
+            else if (view == MetersReadingsVM && MetersReadingsVM != null)
+            {
+                _ = MetersReadingsVM.LoadAllDataAsync();
+            }
+            else if (view == PaymentsVM && PaymentsVM != null)
+            {
+                _ = PaymentsVM.LoadPaymentsAsync();
+            }
         }
     }
 }

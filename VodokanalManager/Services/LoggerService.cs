@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.IO;
 using System.Text;
 
@@ -75,7 +75,7 @@ namespace VodokanalManager.Services
                 }
                 catch
                 {
-                    // Игнорируем ошибки логирования
+                    
                 }
             }
         }

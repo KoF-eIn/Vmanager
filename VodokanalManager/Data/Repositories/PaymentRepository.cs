@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Text;
@@ -10,6 +10,7 @@ namespace VodokanalManager.Data.Repositories
     {
         List<Payment> GetAll(int? subscriberId = null, DateTime? fromDate = null, DateTime? toDate = null);
         void AddPayment(Payment payment);
+        void DeletePayment(int paymentId);
         decimal GetPaymentsSumForPeriod(int subscriberId, DateTime fromDate, DateTime toDate);
     }
 
@@ -123,6 +124,16 @@ namespace VodokanalManager.Data.Repositories
             }
         }
 
+public void DeletePayment(int paymentId)
+        {
+            using (var conn = _database.CreateConnection())
+            using (var cmd = conn.CreateCommand())
+            {
+                cmd.CommandText = "DELETE FROM Payments WHERE Id = @id;";
+                AddParam(cmd, "@id", paymentId);
+                cmd.ExecuteNonQuery();
+            }
+        }
         private static Payment MapPayment(IDataRecord reader)
         {
             return new Payment

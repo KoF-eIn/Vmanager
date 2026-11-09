@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Globalization;
 using System.Windows;
 using System.Windows.Controls;
@@ -32,8 +32,7 @@ namespace VodokanalManager.Views
             SubscriberInfoText.Text = $"Абонент: {_meter.SubscriberName} (л/с {_meter.SubscriberAccountNo})";
             MeterInfoText.Text = $"Прибор: {_meter.SerialNo} • {_meter.ServiceTypeName}";
 
-            // Определение последнего показания
-            var lastReading = _readingRepository.GetLastReading(_meter.Id);
+var lastReading = _readingRepository.GetLastReading(_meter.Id);
             if (lastReading != null)
             {
                 _hasPrevReading = true;
@@ -87,8 +86,7 @@ namespace VodokanalManager.Views
                 ConsumptionCalcText.Text = "Первичное показание (расход = 0,000 м³)";
             }
 
-            // Поиск действующего тарифа
-            DateTime period = PeriodDatePicker.SelectedDate ?? DateTime.Today;
+DateTime period = PeriodDatePicker.SelectedDate ?? DateTime.Today;
             var tariff = _tariffRepository.GetActiveTariff(_meter.ServiceTypeId, period);
 
             if (tariff != null)

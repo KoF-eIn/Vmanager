@@ -1,16 +1,19 @@
-## Visual Studio .gitignore
+﻿## Visual Studio
 .vs/
 *.user
 *.suo
 *.userosscache
 *.sln.docstates
 
-## Сборочные каталоги
+## Build caches
 [Bb]in/
 [Oo]bj/
 TestResults/
 
-## Временные файлы и кэш
+## Reports directory (private)
+docs/
+
+## Temp files
 *.log
 *.tmp
 *.bak
@@ -18,11 +21,15 @@ TestResults/
 *.db-wal
 *.db-shm
 
-## Папку lib НЕ игнорировать (содержит обязательные бинарные сборки SQLite)
+## Microsoft Office
+~$*
+
+## Keep libraries
 !lib/
 !lib/System.Data.SQLite.dll
 !lib/x86/SQLite.Interop.dll
 !lib/x64/SQLite.Interop.dll
 
-## Временные файлы Microsoft Office
-~$*
+## Keep Release executable build
+!Release/
+!Release/**

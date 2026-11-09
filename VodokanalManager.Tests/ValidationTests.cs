@@ -1,4 +1,4 @@
-using System.Text.RegularExpressions;
+﻿using System.Text.RegularExpressions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace VodokanalManager.Tests
@@ -21,7 +21,7 @@ namespace VodokanalManager.Tests
         [TestMethod]
         public void DatabaseName_Validation_RegexCheck()
         {
-            // Регулярное выражение из ТЗ: ^[A-Za-z0-9_]{1,50}$
+            
             var regex = new Regex(@"^[A-Za-z0-9_]{1,50}$");
 
             Assert.IsTrue(regex.IsMatch("VodokanalDB"));

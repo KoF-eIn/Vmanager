@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
@@ -33,19 +33,17 @@ namespace VodokanalManager.Services
                 ColumnWidth = 800
             };
 
-            // Шапка документа
-            var headerP = new Paragraph
+var headerP = new Paragraph
             {
                 TextAlignment = TextAlignment.Center,
                 Margin = new Thickness(0, 0, 0, 15)
             };
-            headerP.Inlines.Add(new Run("МУП «Водоканал-Сервис» г. Канска\n") { FontSize = 16, FontWeight = FontWeights.Bold });
+            headerP.Inlines.Add(new Run("ООО «Водоканал-Сервис» г. Канска\n") { FontSize = 16, FontWeight = FontWeights.Bold });
             headerP.Inlines.Add(new Run("Красноярский край, г. Канск, мкр. 4-й Центральный, д. 33 | ИНН 2450012345 | Тел. 8 (39161) 2-15-40\n") { FontSize = 10, Foreground = Brushes.Gray });
             headerP.Inlines.Add(new Run($"ПЛАТЁЖНЫЙ ДОКУМЕНТ (КВИТАНЦИЯ) ЗА {period.ToString("MMMM yyyy", RussianCulture).ToUpper()}\n") { FontSize = 13, FontWeight = FontWeights.SemiBold });
             doc.Blocks.Add(headerP);
 
-            // Блок реквизитов абонента
-            var subTable = new Table { Margin = new Thickness(0, 0, 0, 15) };
+var subTable = new Table { Margin = new Thickness(0, 0, 0, 15) };
             subTable.Columns.Add(new TableColumn { Width = new GridLength(200) });
             subTable.Columns.Add(new TableColumn { Width = new GridLength(500) });
 
@@ -58,21 +56,20 @@ namespace VodokanalManager.Services
             subTable.RowGroups.Add(rowGroupSub);
             doc.Blocks.Add(subTable);
 
-            // Таблица начислений по приборам учета
-            var pChargesTitle = new Paragraph(new Run("Сведения о потреблении и начислениях за расчетный период:") { FontWeight = FontWeights.Bold })
+var pChargesTitle = new Paragraph(new Run("Сведения о потреблении и начислениях за расчетный период:") { FontWeight = FontWeights.Bold })
             {
                 Margin = new Thickness(0, 0, 0, 8)
             };
             doc.Blocks.Add(pChargesTitle);
 
             var chargesTable = new Table { Margin = new Thickness(0, 0, 0, 15), CellSpacing = 0 };
-            chargesTable.Columns.Add(new TableColumn { Width = new GridLength(140) }); // Услуга
-            chargesTable.Columns.Add(new TableColumn { Width = new GridLength(110) }); // Прибор
-            chargesTable.Columns.Add(new TableColumn { Width = new GridLength(90) });  // Нач. пок.
-            chargesTable.Columns.Add(new TableColumn { Width = new GridLength(90) });  // Кон. пок.
-            chargesTable.Columns.Add(new TableColumn { Width = new GridLength(80) });  // Расход
-            chargesTable.Columns.Add(new TableColumn { Width = new GridLength(85) });  // Тариф
-            chargesTable.Columns.Add(new TableColumn { Width = new GridLength(95) });  // Начислено
+            chargesTable.Columns.Add(new TableColumn { Width = new GridLength(140) }); 
+            chargesTable.Columns.Add(new TableColumn { Width = new GridLength(110) }); 
+            chargesTable.Columns.Add(new TableColumn { Width = new GridLength(90) });  
+            chargesTable.Columns.Add(new TableColumn { Width = new GridLength(90) });  
+            chargesTable.Columns.Add(new TableColumn { Width = new GridLength(80) });  
+            chargesTable.Columns.Add(new TableColumn { Width = new GridLength(85) });  
+            chargesTable.Columns.Add(new TableColumn { Width = new GridLength(95) });  
 
             var headerRowGroup = new TableRowGroup();
             var headerRow = new TableRow { Background = new SolidColorBrush(Color.FromRgb(241, 245, 249)) };
@@ -121,8 +118,7 @@ namespace VodokanalManager.Services
             chargesTable.RowGroups.Add(dataRowGroup);
             doc.Blocks.Add(chargesTable);
 
-            // Блок финансового баланса
-            var balanceTable = new Table { Margin = new Thickness(0, 0, 0, 20) };
+var balanceTable = new Table { Margin = new Thickness(0, 0, 0, 20) };
             balanceTable.Columns.Add(new TableColumn { Width = new GridLength(450) });
             balanceTable.Columns.Add(new TableColumn { Width = new GridLength(200) });
 
@@ -137,8 +133,7 @@ namespace VodokanalManager.Services
             balanceTable.RowGroups.Add(balanceRows);
             doc.Blocks.Add(balanceTable);
 
-            // Нижний колонтитул
-            var footerP = new Paragraph
+var footerP = new Paragraph
             {
                 Margin = new Thickness(0, 15, 0, 0),
                 FontSize = 10,
@@ -147,7 +142,7 @@ namespace VodokanalManager.Services
                 BorderThickness = new Thickness(0, 1, 0, 0),
                 Padding = new Thickness(0, 8, 0, 0)
             };
-            footerP.Inlines.Add(new Run("Оплату можно произвести в кассе МУП «Водоканал-Сервис», через отделения банков и онлайн-банкинг.\n"));
+            footerP.Inlines.Add(new Run("Оплату можно произвести в кассе ООО «Водоканал-Сервис», через отделения банков и онлайн-банкинг.\n"));
             footerP.Inlines.Add(new Run($"Документ сформирован программным комплексом «Водоканал-Сервис» | Дата печати: {DateTime.Now:dd.MM.yyyy HH:mm}"));
             doc.Blocks.Add(footerP);
 
@@ -162,7 +157,7 @@ namespace VodokanalManager.Services
             if (printDialog.ShowDialog() == true)
             {
                 var paginator = ((IDocumentPaginatorSource)document).DocumentPaginator;
-                printDialog.PrintDocument(paginator, "Квитанция МУП Водоканал");
+                printDialog.PrintDocument(paginator, "Квитанция ООО Водоканал-Сервис");
             }
         }
 

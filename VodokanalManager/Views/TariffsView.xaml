@@ -1,4 +1,4 @@
-<UserControl x:Class="VodokanalManager.Views.TariffsView"
+﻿<UserControl x:Class="VodokanalManager.Views.TariffsView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:common="clr-namespace:VodokanalManager.ViewModels.Common">
@@ -14,8 +14,7 @@
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
-        <!-- Карточка ввода нового тарифа -->
-        <Border Grid.Row="0" Style="{StaticResource CardBorderStyle}" Padding="16" Margin="0,0,0,12">
+<Border Grid.Row="0" Style="{StaticResource CardBorderStyle}" Padding="16" Margin="0,0,0,12">
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto"/>
@@ -55,8 +54,7 @@
             </Grid>
         </Border>
 
-        <!-- Баннеры сообщений -->
-        <StackPanel Grid.Row="1" Margin="0,0,0,8">
+<StackPanel Grid.Row="1" Margin="0,0,0,8">
             <Border Background="{StaticResource DangerLightBrush}" BorderBrush="{StaticResource DangerBrush}" BorderThickness="1" CornerRadius="4" Padding="10,6" Margin="0,0,0,6" Visibility="{Binding ErrorMessage, Converter={StaticResource StringToVis}}">
                 <TextBlock Text="{Binding ErrorMessage}" Foreground="{StaticResource DangerBrush}" FontSize="12" TextWrapping="Wrap"/>
             </Border>
@@ -66,8 +64,7 @@
             </Border>
         </StackPanel>
 
-        <!-- Таблица тарифов -->
-        <Border Grid.Row="2" Style="{StaticResource CardBorderStyle}" Margin="0">
+<Border Grid.Row="2" Style="{StaticResource CardBorderStyle}" Margin="0">
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto"/>
