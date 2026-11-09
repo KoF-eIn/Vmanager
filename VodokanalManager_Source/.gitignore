@@ -1,0 +1,28 @@
+## Visual Studio .gitignore
+.vs/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+## Сборочные каталоги
+[Bb]in/
+[Oo]bj/
+TestResults/
+
+## Временные файлы и кэш
+*.log
+*.tmp
+*.bak
+*.cache
+*.db-wal
+*.db-shm
+
+## Папку lib НЕ игнорировать (содержит обязательные бинарные сборки SQLite)
+!lib/
+!lib/System.Data.SQLite.dll
+!lib/x86/SQLite.Interop.dll
+!lib/x64/SQLite.Interop.dll
+
+## Временные файлы Microsoft Office
+~$*

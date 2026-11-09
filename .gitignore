@@ -2,34 +2,18 @@
 .vs/
 *.user
 *.suo
-*.userosscache
-*.sln.docstates
-
-## Build caches
 [Bb]in/
 [Oo]bj/
 TestResults/
 
-## Reports directory (private)
+## Reports (private)
 docs/
 
-## Temp files
+## Temp
 *.log
 *.tmp
 *.bak
 *.cache
 *.db-wal
 *.db-shm
-
-## Microsoft Office
 ~$*
-
-## Keep libraries
-!lib/
-!lib/System.Data.SQLite.dll
-!lib/x86/SQLite.Interop.dll
-!lib/x64/SQLite.Interop.dll
-
-## Keep Release executable build
-!Release/
-!Release/**
