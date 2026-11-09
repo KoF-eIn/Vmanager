@@ -1,0 +1,22 @@
+﻿<mxfile host="app.diagrams.net" version="21.0.0">
+  <diagram id="work-1" name="Workplace Plan">
+    <mxGraphModel dx="1000" dy="700" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1000" pageHeight="650" background="#ffffff">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="r" value="Кабинет оператора абонентского отдела ООО «Водоканал-Сервис»" style="shape=rect;fillColor=none;strokeColor=#334155;strokeWidth=3;fontStyle=1;verticalAlign=top;" vertex="1" parent="1">
+          <mxGeometry x="80" y="80" width="840" height="520" as="geometry" />
+        </mxCell>
+        <mxCell id="desk" value="Рабочий стол оператора (75 см)" style="rounded=0;fillColor=#f1f5f9;strokeColor=#475569;strokeWidth=2;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="340" y="220" width="320" height="180" as="geometry" />
+        </mxCell>
+        <mxCell id="mon" value="Монитор 24″ (антиблик)" style="rounded=1;fillColor=#0f172a;strokeColor=#0f172a;fontColor=#ffffff;" vertex="1" parent="1">
+          <mxGeometry x="420" y="260" width="160" height="25" as="geometry" />
+        </mxCell>
+        <mxCell id="chair" value="Кресло" style="shape=ellipse;fillColor=#e0f2fe;strokeColor=#0284c7;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="460" y="440" width="80" height="70" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

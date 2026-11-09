@@ -1,13 +1,10 @@
-﻿## Visual Studio
+## Visual Studio
 .vs/
 *.user
 *.suo
 [Bb]in/
 [Oo]bj/
 TestResults/
-
-## Reports (private)
-docs/
 
 ## Temp
 *.log

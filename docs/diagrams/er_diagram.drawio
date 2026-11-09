@@ -1,0 +1,25 @@
+﻿<mxfile host="app.diagrams.net" version="21.0.0">
+  <diagram id="er-1" name="ER Diagram">
+    <mxGraphModel dx="1100" dy="700" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1200" pageHeight="760" background="#ffffff">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="tSub" value="Subscribers (Абоненты)&#xa;---------------------------------------&#xa;PK Id : INTEGER&#xa;UK AccountNo : TEXT(10)&#xa;FullName : TEXT(150)&#xa;Address : TEXT(250)&#xa;Phone : TEXT(20)&#xa;Balance : DECIMAL(10,2)" style="shape=table;startSize=0;container=1;collapsible=0;childLayout=tableLayout;fixedRows=1;rowLines=0;fontStyle=1;fillColor=#f8fafc;strokeColor=#0284c7;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="50" y="90" width="260" height="180" as="geometry" />
+        </mxCell>
+        <mxCell id="tMet" value="Meters (Приборы учета ИПУ)&#xa;---------------------------------------&#xa;PK Id : INTEGER&#xa;FK SubscriberId : INTEGER&#xa;MeterNumber : TEXT(50)&#xa;ServiceType : TEXT(50)&#xa;InstallationDate : DATE&#xa;NextVerificationDate : DATE&#xa;Status : TEXT(20)" style="shape=table;startSize=0;container=1;collapsible=0;childLayout=tableLayout;fixedRows=1;rowLines=0;fontStyle=1;fillColor=#f8fafc;strokeColor=#0284c7;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="460" y="90" width="270" height="180" as="geometry" />
+        </mxCell>
+        <mxCell id="tRead" value="Readings (Показания)&#xa;---------------------------------------&#xa;PK Id : INTEGER&#xa;FK MeterId : INTEGER&#xa;ReadingDate : DATE&#xa;Value : DECIMAL(10,3)&#xa;Consumption : DECIMAL(10,3)&#xa;RegisteredBy : TEXT(50)" style="shape=table;startSize=0;container=1;collapsible=0;childLayout=tableLayout;fixedRows=1;rowLines=0;fontStyle=1;fillColor=#f8fafc;strokeColor=#0284c7;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="870" y="90" width="260" height="180" as="geometry" />
+        </mxCell>
+        <mxCell id="tPay" value="Payments (Платежи)&#xa;---------------------------------------&#xa;PK Id : INTEGER&#xa;FK SubscriberId : INTEGER&#xa;PaymentDate : DATETIME&#xa;Amount : DECIMAL(10,2)&#xa;PaymentMethod : TEXT(30)&#xa;ReceiptNumber : TEXT(50)" style="shape=table;startSize=0;container=1;collapsible=0;childLayout=tableLayout;fixedRows=1;rowLines=0;fontStyle=1;fillColor=#f8fafc;strokeColor=#0284c7;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="460" y="360" width="270" height="170" as="geometry" />
+        </mxCell>
+        <mxCell id="tUsr" value="Users (Пользователи)&#xa;---------------------------------------&#xa;PK Id : INTEGER&#xa;UK Login : TEXT(50)&#xa;PasswordHash : TEXT(128)&#xa;Role : TEXT(20)&#xa;InitialPassword : TEXT(50)&#xa;FK SubscriberId : INTEGER" style="shape=table;startSize=0;container=1;collapsible=0;childLayout=tableLayout;fixedRows=1;rowLines=0;fontStyle=1;fillColor=#f8fafc;strokeColor=#0284c7;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="50" y="360" width="260" height="170" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

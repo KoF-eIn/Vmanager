@@ -1,0 +1,46 @@
+﻿<mxfile host="app.diagrams.net" version="21.0.0">
+  <diagram id="dfd-1" name="DFD Level 1">
+    <mxGraphModel dx="1000" dy="700" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1150" pageHeight="720" background="#ffffff">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="entSub" value="Абонент&#xa;(Потребитель)" style="shape=rectangle;whiteSpace=wrap;html=1;fillColor=#f8fafc;strokeColor=#475569;strokeWidth=2;fontStyle=1;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="40" y="160" width="140" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="entOp" value="Оператор&#xa;абонотдела" style="shape=rectangle;whiteSpace=wrap;html=1;fillColor=#f8fafc;strokeColor=#475569;strokeWidth=2;fontStyle=1;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="40" y="380" width="140" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="entKass" value="Кассир" style="shape=rectangle;whiteSpace=wrap;html=1;fillColor=#f8fafc;strokeColor=#475569;strokeWidth=2;fontStyle=1;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="970" y="380" width="140" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="entBuh" value="Бухгалтерия /&#xa;Руководство" style="shape=rectangle;whiteSpace=wrap;html=1;fillColor=#f8fafc;strokeColor=#475569;strokeWidth=2;fontStyle=1;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="970" y="160" width="140" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="p1" value="1.0&#xa;Регистрация&#xa;абонентов и ИПУ" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e0f2fe;strokeColor=#0284c7;strokeWidth=2;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="270" y="130" width="180" height="75" as="geometry" />
+        </mxCell>
+        <mxCell id="p2" value="2.0&#xa;Прием и ввод&#xa;показаний ИПУ" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e0f2fe;strokeColor=#0284c7;strokeWidth=2;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="270" y="270" width="180" height="75" as="geometry" />
+        </mxCell>
+        <mxCell id="p3" value="3.0&#xa;Расчет расхода&#xa;и начислений" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e0f2fe;strokeColor=#0284c7;strokeWidth=2;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="520" y="270" width="180" height="75" as="geometry" />
+        </mxCell>
+        <mxCell id="p4" value="4.0&#xa;Прием платежей&#xa;и печать чеков" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e0f2fe;strokeColor=#0284c7;strokeWidth=2;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="760" y="380" width="170" height="75" as="geometry" />
+        </mxCell>
+        <mxCell id="p5" value="5.0&#xa;Формирование&#xa;отчетов и квитанций" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e0f2fe;strokeColor=#0284c7;strokeWidth=2;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="760" y="160" width="170" height="75" as="geometry" />
+        </mxCell>
+        <mxCell id="d1" value="D1 | Абоненты и ИПУ" style="shape=partialRectangle;top=1;bottom=1;fillColor=#fef3c7;strokeColor=#d97706;strokeWidth=2;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="390" y="480" width="160" height="45" as="geometry" />
+        </mxCell>
+        <mxCell id="d2" value="D2 | Показания и начисления" style="shape=partialRectangle;top=1;bottom=1;fillColor=#fef3c7;strokeColor=#d97706;strokeWidth=2;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="600" y="480" width="170" height="45" as="geometry" />
+        </mxCell>
+        <mxCell id="d3" value="D3 | Платежи и сальдо" style="shape=partialRectangle;top=1;bottom=1;fillColor=#fef3c7;strokeColor=#d97706;strokeWidth=2;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="490" y="600" width="180" height="45" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

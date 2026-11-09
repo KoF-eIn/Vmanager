@@ -1,0 +1,22 @@
+﻿<mxfile host="app.diagrams.net" version="21.0.0">
+  <diagram id="arch-1" name="Architecture Diagram">
+    <mxGraphModel dx="1000" dy="700" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1100" pageHeight="680" background="#ffffff">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="l1" value="Уровень представления (View / XAML)" style="swimlane;fillColor=#f0f9ff;strokeColor=#0284c7;fontStyle=1;startSize=26;" vertex="1" parent="1">
+          <mxGeometry x="50" y="80" width="1000" height="115" as="geometry" />
+        </mxCell>
+        <mxCell id="l2" value="Уровень логики представления (ViewModel / MVVM)" style="swimlane;fillColor=#f8fafc;strokeColor=#475569;fontStyle=1;startSize=26;" vertex="1" parent="1">
+          <mxGeometry x="50" y="225" width="1000" height="115" as="geometry" />
+        </mxCell>
+        <mxCell id="l3" value="Уровень бизнес-логики и сервисов (Services &amp; Repositories)" style="swimlane;fillColor=#f0fdf4;strokeColor=#16a34a;fontStyle=1;startSize=26;" vertex="1" parent="1">
+          <mxGeometry x="50" y="370" width="1000" height="115" as="geometry" />
+        </mxCell>
+        <mxCell id="l4" value="Уровень хранения данных (Storage &amp; Persistence)" style="swimlane;fillColor=#fef3c7;strokeColor=#d97706;fontStyle=1;startSize=26;" vertex="1" parent="1">
+          <mxGeometry x="50" y="515" width="1000" height="115" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

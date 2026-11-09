@@ -5,6 +5,7 @@
 ## Структура репозитория
 * **VodokanalManager_Source** — исходный код проекта Visual Studio (C#, WPF, SQLite) и тесты для анализа приложения
 * **VodokanalManager_Portable** — готовая портативная версия для запуска (VodokanalManager.exe)
+* **docs** — отчет по производственной практике (Word и PDF)
 
 ## Вход в систему (учетные данные по умолчанию)
 * **Логин:** `admin`
